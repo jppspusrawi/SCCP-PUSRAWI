@@ -1427,8 +1427,10 @@ function nilaiRowsArr(allHist){const cur=store.get("sccp-nilai",null);const H=st
   return allHist?H.map(h=>nilaiRow(h,h.at)):(cur?[nilaiRow(cur)]:[])}
 function csvNilai(allHist){return csvRows(nilaiRowsArr(allHist))}
 /* ---- Hantar terus ke Google Sheet (Apps Script Web App) ---- */
+const GS_DEFAULT_URL="https://script.google.com/macros/s/AKfycbwyS8NubRcJjIKFUg8CJ579Hb66p16kTNwtkYNLS0yUCriQo3HaIEcXgxr-Lcb1ik87/exec";
+const gsCfg=()=>{const c=store.get("sccp-gs",{});return{url:(c.url||GS_DEFAULT_URL).trim(),token:c.token||""}};
 const IN_CLAUDE=()=>!!(window.claude&&window.claude.use);
-async function gsSend(payload){const cfg=store.get("sccp-gs",{});
+async function gsSend(payload){const cfg=gsCfg();
   if(IN_CLAUDE())throw{message:"hantar terus hanya berfungsi di laman web portal (cth. GitHub Pages). Di sini, gunakan CSV"};
   if(!cfg.url)throw{message:"URL Web App belum ditetapkan — buka Dashboard Google Sheet → Tetapan sambungan"};
   const body=JSON.stringify(Object.assign({token:cfg.token||""},payload));
@@ -1518,7 +1520,7 @@ function vGsheet(v){
   const AC=["ID_Audit","Tarikh","Tahun","Bulan","No_Rujukan","Juruaudit","Lokasi","Jenis_Skop","Skop","Kod_Isu","Dokumen","Isu","Tahap","Status","Rekod_Disemak","Catatan"];
   const NCs=["ID_Penilaian","Tarikh","Tahun","Bulan","Nama","Jawatan","Jabatan","No_Borang","Kategori","Tugasan","Penilai","Markah","Gred","Bil_Dinilai","Bil_A","Bil_B","Bil_C","Bil_F","Professionalism % … Integrity % (7 lajur)","T1 … T27 (gred setiap tindakan)","Catatan"];
   const S=(t,items,sub)=>`<section class="stack"><h2>${t}</h2>${sub?`<p class="muted">${sub}</p>`:""}<ol class="steps">${items.map(x=>`<li><div><b>${x[0]}</b><span>${x[1]}</span></div></li>`).join("")}</ol></section>`;
-  const cfg=store.get("sccp-gs",{url:"",token:""});
+  const cfg=gsCfg();
   v.innerHTML=`<header class="stack"><span class="eyebrow">Laporan · Google Sheet</span><h1>Panduan A–Z: sambungkan portal ke Google Sheet</h1>
   <p class="lede">Dua kaedah: <b>Kaedah 1 — Hantar terus</b> (butang ☁ dalam portal menulis terus ke Google Sheet melalui Apps Script) dan <b>Kaedah 2 — CSV</b> (muat turun dan import manual). Kaedah 1 hanya berfungsi di laman web portal (GitHub Pages).</p></header>
 
@@ -1538,7 +1540,7 @@ function vGsheet(v){
    ["Tetapkan token keselamatan","Kembali ke Google Sheet → muat semula (F5) → menu baharu <b>SCCP PUSRAWI → 1. Tetapkan token keselamatan</b> → isi kata kunci rahsia (cth. PUSRAWI-SCCP-2026) → OK. Kali pertama akan diminta kebenaran sekali lagi — Allow."]])}
 
   <section class="card stack" id="gsCfg"><h2>Bahagian C · Tetapan sambungan dalam portal</h2>
-   <p class="muted" style="font-size:.9rem">Diisi sekali pada setiap peranti/pelayar yang akan menghantar data. Disimpan dalam pelayar ini sahaja.</p>
+   <p class="muted" style="font-size:.9rem">URL Web App Hospital PUSRAWI telah diisi siap. Hanya isi <b>token</b> (jika token telah ditetapkan dalam Google Sheet) sekali pada setiap peranti/pelayar, kemudian tekan Uji sambungan.</p>
    ${IN_CLAUDE()?`<div class="note">Anda sedang membuka portal dalam claude.ai — hantar terus disekat di sini. Buka laman web portal (GitHub Pages) untuk menggunakan Kaedah 1.</div>`:""}
    <div class="field"><label for="gsUrl">URL Web App (berakhir /exec)</label><input id="gsUrl" value="${esc(cfg.url||"")}" placeholder="https://script.google.com/macros/s/…/exec"></div>
    <div class="field"><label for="gsTok">Token keselamatan (sama seperti dalam Google Sheet)</label><input id="gsTok" value="${esc(cfg.token||"")}" placeholder="cth. PUSRAWI-SCCP-2026"></div>
