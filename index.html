@@ -1344,10 +1344,9 @@ async function getDL(){if(DLtried)return DL;DLtried=true;
 function addExportBar(r,v){if(!EXPORTABLE[r])return;
   const bar=document.createElement("div");const side=v.querySelector(".sumbox");
   bar.className=side?"xbar side":"xbar";
-  bar.innerHTML=side?`<div class="row" style="gap:8px"><button class="btn" data-x="pdf">⬇ PDF</button><button class="btn" data-x="docx">⬇ Word</button></div>${r==="audit"?`<div class="row" style="gap:8px"><button class="btn gsbtn" data-x="gs">☁ Hantar ke Google Sheet</button></div><div class="row" style="gap:8px"><button class="btn" data-x="csv">⬇ CSV untuk Google Sheet</button></div>`:r==="nilai"?`<div class="row" style="gap:8px"><button class="btn gsbtn" data-x="gs">☁ Hantar borang ini</button><button class="btn gsbtn" data-x="gsall">☁ Hantar semua sejarah</button></div><div class="row" style="gap:8px"><button class="btn" data-x="csv">⬇ CSV borang ini</button><button class="btn" data-x="csvall">⬇ CSV semua sejarah</button></div>`:""}<span class="xmsg muted"></span>`:`<span class="muted">Muat turun bahagian ini:</span><button class="btn sm" data-x="pdf">PDF</button><button class="btn sm" data-x="docx">Word (.docx)</button><span class="xmsg muted"></span>`;
-  if(IN_CLAUDE())bar.querySelectorAll(".gsbtn").forEach(x=>x.parentElement.remove());
-  if(side){const pri=side.querySelector(".btn.pri");(pri||side.firstElementChild).after(bar)}else{const h=v.querySelector("header");if(!h)return;h.appendChild(bar)}
-  getDL().then(d=>{if(!d){bar.querySelectorAll("button:not(.gsbtn)").forEach(b=>b.disabled=true);bar.querySelector(".xmsg").textContent="Muat turun tidak tersedia dalam paparan ini."}});
+  bar.innerHTML=side?`<div class="row" style="gap:8px"><button class="btn" data-x="pdf">⬇ PDF</button><button class="btn" data-x="docx">⬇ Word</button></div><span class="xmsg muted"></span>`:`<span class="muted">Muat turun bahagian ini:</span><button class="btn sm" data-x="pdf">PDF</button><button class="btn sm" data-x="docx">Word (.docx)</button><span class="xmsg muted"></span>`;
+  if(side){const pri=side.querySelector(".btn.pri");(pri||side.firstElementChild).after(bar);if(pri&&(r==="audit"||r==="nilai"))pri.addEventListener("click",()=>autoSync(r,bar))}else{const h=v.querySelector("header");if(!h)return;h.appendChild(bar)}
+  getDL().then(d=>{if(!d){bar.querySelectorAll("button").forEach(b=>b.disabled=true);bar.querySelector(".xmsg").textContent="Muat turun tidak tersedia dalam paparan ini."}});
   bar.onclick=async e=>{const b=e.target.closest("[data-x]");if(!b)return;const msg=bar.querySelector(".xmsg");
     bar.querySelectorAll("button").forEach(x=>x.disabled=true);msg.textContent="Menyediakan fail…";
     try{const x=b.dataset.x;let fn,data;
@@ -1357,7 +1356,7 @@ function addExportBar(r,v){if(!EXPORTABLE[r])return;
         fn=(r==="audit"?"GSheet-Data_Audit-":"GSheet-Data_Nilai-")+(x==="csvall"?"sejarah-":"")+today()+".csv"}
       else{const doc=buildPrint(r);fn=doc.file+"."+x;data=x==="pdf"?await toPDF(doc):await toDOCX(doc)}
       const d=await getDL();if(!d)throw{code:"unavailable"};
-      await d.save({filename:fn,data});msg.textContent="Fail disediakan: "+fn}
+      await d.save({filename:fn,data});msg.textContent="Fail disediakan: "+fn;if(r==="audit"||r==="nilai")autoSync(r,bar)}
     catch(err){const gsx=/^gs/.test(b.dataset.x);msg.textContent=err&&err.code==="declined"?"Muat turun dibatalkan.":err&&err.code==="rate_limited"?"Tunggu sebentar dan cuba lagi.":(gsx?"Tidak dapat menghantar (":"Tidak dapat menyediakan fail (")+((err&&(err.code||err.message))||"ralat")+")."}
     finally{bar.querySelectorAll("button").forEach(x=>x.disabled=false)}}}
 function loadScript(src){return new Promise((res,rej)=>{if(document.querySelector(`script[src="${src}"]`)){res();return}const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej({message:"gagal memuat pustaka"});document.head.appendChild(s)})}
@@ -1426,6 +1425,15 @@ function nilaiRow(S,at){const s=nilaiScore(S);const d=(S.meta.masa||at||new Date
 function nilaiRowsArr(allHist){const cur=store.get("sccp-nilai",null);const H=store.get("sccp-nilai-hist",[]);
   return allHist?H.map(h=>nilaiRow(h,h.at)):(cur?[nilaiRow(cur)]:[])}
 function csvNilai(allHist){return csvRows(nilaiRowsArr(allHist))}
+/* ---- Rekod automatik ke Google Sheet apabila Salin / PDF / Word ditekan ---- */
+let syncBusy=false;
+async function autoSync(r,bar){if(IN_CLAUDE())return;const say=t=>{try{console.info("[SCCP Google Sheet] "+t)}catch(e){}};
+  const rows=r==="audit"?auditRowsArr():nilaiRowsArr(false);if(!rows.length)return;
+  if(r==="audit"&&!rows.some(x=>x[13]!=="Belum dinilai")){say("Belum direkod ke Google Sheet — tiada isu yang dinilai lagi.");return}
+  if(r==="nilai"&&!rows[0][4]&&!rows[0][13]){say("Belum direkod ke Google Sheet — isi nama atau gred dahulu.");return}
+  if(syncBusy)return;syncBusy=true;say("Merekod ke Google Sheet…");
+  try{const j=await gsSend({type:r==="audit"?"audit":"nilai",rows});say(j.unverified?"Dihantar ke Google Sheet (semak helaian untuk pengesahan).":"✓ Direkod dalam Google Sheet ("+j.helaian+")"+(j.diganti?" — rekod sama dikemas kini":"")+".")}
+  catch(e){say("⚠ Tidak dapat direkod ke Google Sheet: "+(e.message||e))}finally{syncBusy=false}}
 /* ---- Hantar terus ke Google Sheet (Apps Script Web App) ---- */
 const GS_DEFAULT_URL="https://script.google.com/macros/s/AKfycbwyS8NubRcJjIKFUg8CJ579Hb66p16kTNwtkYNLS0yUCriQo3HaIEcXgxr-Lcb1ik87/exec";
 const gsCfg=()=>{const c=store.get("sccp-gs",{});return{url:(c.url||GS_DEFAULT_URL).trim(),token:c.token||""}};
@@ -1522,7 +1530,7 @@ function vGsheet(v){
   const S=(t,items,sub)=>`<section class="stack"><h2>${t}</h2>${sub?`<p class="muted">${sub}</p>`:""}<ol class="steps">${items.map(x=>`<li><div><b>${x[0]}</b><span>${x[1]}</span></div></li>`).join("")}</ol></section>`;
   const cfg=gsCfg();
   v.innerHTML=`<header class="stack"><span class="eyebrow">Laporan · Google Sheet</span><h1>Panduan A–Z: sambungkan portal ke Google Sheet</h1>
-  <p class="lede">Dua kaedah: <b>Kaedah 1 — Hantar terus</b> (butang ☁ dalam portal menulis terus ke Google Sheet melalui Apps Script) dan <b>Kaedah 2 — CSV</b> (muat turun dan import manual). Kaedah 1 hanya berfungsi di laman web portal (GitHub Pages).</p></header>
+  <p class="lede">Setiap kali pengisi menekan <b>Salin</b>, <b>⬇ PDF</b> atau <b>⬇ Word</b> dalam Audit SCCP atau Penilaian Nilai Teras, data direkod automatik ke Google Sheet induk melalui Apps Script. Berfungsi di laman web portal (GitHub Pages).</p></header>
 
   ${S("Bahagian A · Sediakan Google Sheet induk (sekali sahaja)",[
    ["Muat naik templat","Muat naik <b>SCCP_PUSRAWI_Dashboard_Audit_NilaiTeras.xlsx</b> ke Google Drive."],
@@ -1547,12 +1555,11 @@ function vGsheet(v){
    <div class="row"><button class="btn pri" id="gsSave">Simpan tetapan</button><button class="btn" id="gsTest">Uji sambungan</button><span id="gsMsg" class="muted" style="font-size:.88rem"></span></div>
   </section>
 
-  ${S("Bahagian D · Guna setiap hari",[
-   ["Audit SCCP","Siapkan audit → kotak ringkasan → <b>☁ Hantar ke Google Sheet</b>. Mesej “Berjaya: 72 baris ditambah ke Data_Audit” akan muncul."],
-   ["Hantar semula = kemas kini","Jika audit dibetulkan dan dihantar semula dengan No. rujukan / tarikh + lokasi yang sama, baris lama diganti — tiada pendua."],
-   ["Penilaian Nilai Teras","Isi borang (pilih Jabatan dari senarai) → <b>☁ Hantar borang ini</b>, atau simpan beberapa borang ke sejarah dan tekan <b>☁ Hantar semua sejarah</b>."],
+  ${S("Bahagian D · Guna setiap hari (automatik)",[
+   ["Audit SCCP","Siapkan audit → tekan <b>Salin laporan audit</b>, <b>⬇ PDF</b> atau <b>⬇ Word</b>. Data audit direkod automatik ke tab Data_Audit; mesej “✓ Direkod dalam Google Sheet” muncul di bawah butang."],
+   ["Penilaian Nilai Teras","Isi borang (pilih Jabatan dari senarai) → tekan <b>Salin ringkasan</b>, <b>⬇ PDF</b> atau <b>⬇ Word</b>. Penilaian direkod automatik ke tab Data_Nilai."],
+   ["Tiada pendua","Klik beberapa kali (cth. Salin kemudian PDF) atau betulkan dan muat turun semula — rekod dengan ID yang sama diganti, bukan ditambah."],
    ["Lihat dashboard","Buka tab Dashboard_Audit / Dashboard_Nilai — dikemas kini serta-merta. Isi C4 untuk tapis tahun."]])}
-
   ${S("Bahagian E · Jika ada masalah",[
    ["“Token tidak sah”","Token dalam portal tidak sama dengan menu SCCP PUSRAWI → 2. Lihat token semasa."],
    ["“jawapan bukan JSON” / gagal","URL salah (mesti /exec, bukan /dev) atau akses deploy bukan “Anyone”. Deploy → Manage deployments → ✏ → Who has access: Anyone."],
@@ -1562,10 +1569,6 @@ function vGsheet(v){
 
   <section class="card stack"><div class="row" style="justify-content:space-between"><h3>Kod Apps Script (Code.gs)</h3><button class="btn sm" id="gsCopy">Salin kod</button></div>
    <pre id="gsCode" style="margin:0;max-height:340px;overflow:auto;background:var(--sunk);padding:12px;border-radius:8px;font-family:var(--f-mono);font-size:.76rem;line-height:1.5;white-space:pre">${esc(GSCODE)}</pre></section>
-
-  ${S("Kaedah 2 · CSV (jika tidak mahu Apps Script)",[
-   ["Muat turun CSV","Audit → ⬇ CSV untuk Google Sheet · Nilai Teras → ⬇ CSV borang ini / semua sejarah."],
-   ["Import","Tab Data_Audit / Data_Nilai → Fail → Import → Muat naik → <b>Tambah pada helaian semasa</b> → Koma → kekalkan “Tukar teks kepada nombor” → Import data."]])}
 
   <section class="grid g2">
     <div class="card stack"><h3>Lajur Data_Audit (16)</h3><p style="font-size:.86rem">${AC.map((c,i)=>`<span class="code" style="margin:0 4px 4px 0;display:inline-block;white-space:normal">${String.fromCharCode(65+i)} · ${c}</span>`).join("")}</p></div>
