@@ -214,7 +214,7 @@ tr:last-child td{border-bottom:none}
 .steps li{counter-increment:s;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start}
 .steps li::before{content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:.85rem}
 .steps li b{display:block}
-.steps li span{font-size:.88rem;color:var(--muted)}
+.steps li span{overflow-wrap:anywhere;font-size:.88rem;color:var(--muted)}
 
 /* Library items */
 .filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);position:sticky;top:70px;z-index:5}
@@ -714,7 +714,8 @@ const ROUTES=[
  {id:"nilai",t:"Penilaian Nilai Teras",grp:"Penilaian"},
  {id:"umum",t:"Semakan Syariah Umum",grp:"Audit"},
  {id:"audit",t:"Audit SCCP Terperinci",grp:"Audit"},
- {id:"susulan",t:"Tindakan Susulan",grp:"Audit"}
+ {id:"susulan",t:"Tindakan Susulan",grp:"Audit"},
+ {id:"gsheet",t:"Dashboard Google Sheet",grp:"Laporan"}
 ];
 function buildNav(){
   let g="",h="";
@@ -732,7 +733,7 @@ function route(){
   const r=ROUTES.find(x=>x.id===id)?id:"utama";
   setCurrent(r);store.set("sccp-last",r);
   const v=$("#view");v.innerHTML="";
-  ({utama:vHome,latihan:vTrain,pustaka:vLib,jabatan:vDept,audit:vAudit,borang:vForms,pantas:vQuick,kuiz:vQuiz,glosari:vGloss,susulan:vFollow,umum:vUmum,nilai:vNilai})[r](v);
+  ({utama:vHome,latihan:vTrain,pustaka:vLib,jabatan:vDept,audit:vAudit,borang:vForms,pantas:vQuick,kuiz:vQuiz,glosari:vGloss,susulan:vFollow,umum:vUmum,nilai:vNilai,gsheet:vGsheet})[r](v);
   if(pendingScroll!=null){const y=pendingScroll;pendingScroll=null;setTimeout(()=>window.scrollTo(0,y),40)}
   else if(!pendingOpen)window.scrollTo(0,0);
   addExportBar(r,v);drawBack();
@@ -1280,7 +1281,7 @@ function vNilai(v){
     <div class="grid g3">
       <div class="field"><label for="m-nama">Nama wargakerja</label><input id="m-nama"></div>
       <div class="field"><label for="m-jaw">Jawatan / unit</label><input id="m-jaw"></div>
-      <div class="field"><label for="m-jab">Jabatan</label><input id="m-jab"></div>
+      <div class="field"><label for="m-jab">Jabatan</label><input id="m-jab" list="jabList" placeholder="Pilih dari senarai"><datalist id="jabList">${Object.values(DEPTS).sort().map(n=>`<option value="${esc(n)}">`).join("")}</datalist></div>
       <div class="field"><label for="m-masa">Tarikh & masa</label><input id="m-masa" type="datetime-local"></div>
       <div class="field"><label for="m-tugas">Tugasan diperhatikan</label><input id="m-tugas" placeholder="cth. kemasukan pesakit, dispensing"></div>
       <div class="field"><label for="m-oleh">Dinilai oleh</label><input id="m-oleh"></div>
@@ -1324,19 +1325,27 @@ function vNilai(v){
 }
 
 /* ================= EXPORT PDF / WORD ================= */
-const EXPORTABLE={latihan:"Modul Latihan SCCP",kuiz:"Kuiz Penilaian SCCP",pustaka:"Pustaka SCCP",jabatan:"SCCP Mengikut Jabatan",pantas:"Rujukan Pantas Hukum",borang:"Indeks Borang dan Polisi",glosari:"Glosari Istilah",nilai:"Penilaian Pengamalan Nilai Teras",umum:"Senarai Semak Syariah Umum",audit:"Laporan Audit SCCP",susulan:"Tindakan Susulan SCCP"};
+const EXPORTABLE={gsheet:"Panduan Dashboard Google Sheet",latihan:"Modul Latihan SCCP",kuiz:"Kuiz Penilaian SCCP",pustaka:"Pustaka SCCP",jabatan:"SCCP Mengikut Jabatan",pantas:"Rujukan Pantas Hukum",borang:"Indeks Borang dan Polisi",glosari:"Glosari Istilah",nilai:"Penilaian Pengamalan Nilai Teras",umum:"Senarai Semak Syariah Umum",audit:"Laporan Audit SCCP",susulan:"Tindakan Susulan SCCP"};
 let DL=null,DLtried=false;
-async function getDL(){if(DLtried)return DL;DLtried=true;try{DL=window.claude&&window.claude.use?await window.claude.use("downloads"):null}catch(e){DL=null}return DL}
+/* Di claude.ai: guna keupayaan "downloads". Di laman web biasa (cth. GitHub Pages): muat turun terus melalui pelayar. */
+const WEB_DL={save:async({filename,data})=>{const MT={pdf:"application/pdf",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",csv:"text/csv;charset=utf-8"};
+  const ext=filename.split(".").pop();const blob=data instanceof Blob?data:new Blob([data],{type:MT[ext]||"application/octet-stream"});
+  const url=URL.createObjectURL(blob);const el=document.createElement("a");el.href=url;el.download=filename;el.rel="noopener";document.body.appendChild(el);el.click();el.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);return{status:"saved"}}};
+async function getDL(){if(DLtried)return DL;DLtried=true;
+  if(!(window.claude&&window.claude.use)){DL=WEB_DL;return DL}
+  try{DL=await window.claude.use("downloads")}catch(e){DL=null}return DL}
 function addExportBar(r,v){if(!EXPORTABLE[r])return;
   const bar=document.createElement("div");const side=v.querySelector(".sumbox");
   bar.className=side?"xbar side":"xbar";
-  bar.innerHTML=side?`<div class="row" style="gap:8px"><button class="btn" data-x="pdf">⬇ PDF</button><button class="btn" data-x="docx">⬇ Word</button></div><span class="xmsg muted"></span>`:`<span class="muted">Muat turun bahagian ini:</span><button class="btn sm" data-x="pdf">PDF</button><button class="btn sm" data-x="docx">Word (.docx)</button><span class="xmsg muted"></span>`;
+  bar.innerHTML=side?`<div class="row" style="gap:8px"><button class="btn" data-x="pdf">⬇ PDF</button><button class="btn" data-x="docx">⬇ Word</button></div>${r==="audit"?`<div class="row" style="gap:8px"><button class="btn" data-x="csv">⬇ CSV untuk Google Sheet</button></div>`:r==="nilai"?`<div class="row" style="gap:8px"><button class="btn" data-x="csv">⬇ CSV borang ini</button><button class="btn" data-x="csvall">⬇ CSV semua sejarah</button></div>`:""}<span class="xmsg muted"></span>`:`<span class="muted">Muat turun bahagian ini:</span><button class="btn sm" data-x="pdf">PDF</button><button class="btn sm" data-x="docx">Word (.docx)</button><span class="xmsg muted"></span>`;
   if(side){const pri=side.querySelector(".btn.pri");(pri||side.firstElementChild).after(bar)}else{const h=v.querySelector("header");if(!h)return;h.appendChild(bar)}
   getDL().then(d=>{if(!d){bar.querySelectorAll("button").forEach(b=>b.disabled=true);bar.querySelector(".xmsg").textContent="Muat turun tidak tersedia dalam paparan ini."}});
   bar.onclick=async e=>{const b=e.target.closest("[data-x]");if(!b)return;const msg=bar.querySelector(".xmsg");
     bar.querySelectorAll("button").forEach(x=>x.disabled=true);msg.textContent="Menyediakan fail…";
-    try{const doc=buildPrint(r);const fn=doc.file+"."+b.dataset.x;
-      const data=b.dataset.x==="pdf"?await toPDF(doc):await toDOCX(doc);
+    try{const x=b.dataset.x;let fn,data;
+      if(x==="csv"||x==="csvall"){data=r==="audit"?csvAudit():csvNilai(x==="csvall");if(!data.trim())throw{message:x==="csvall"?"tiada penilaian dalam sejarah":"tiada data"};
+        fn=(r==="audit"?"GSheet-Data_Audit-":"GSheet-Data_Nilai-")+(x==="csvall"?"sejarah-":"")+today()+".csv"}
+      else{const doc=buildPrint(r);fn=doc.file+"."+x;data=x==="pdf"?await toPDF(doc):await toDOCX(doc)}
       const d=await getDL();if(!d)throw{code:"unavailable"};
       await d.save({filename:fn,data});msg.textContent="Fail disediakan: "+fn}
     catch(err){msg.textContent=err&&err.code==="declined"?"Muat turun dibatalkan.":err&&err.code==="rate_limited"?"Tunggu sebentar dan cuba lagi.":"Tidak dapat menyediakan fail ("+((err&&(err.code||err.message))||"ralat")+")."}
@@ -1391,6 +1400,21 @@ const PRINT_CSS=`.pvwrap{--bg:#fff;--surface:#fff;--sunk:#eef1ee;--ink:#1d2522;-
 .pv .grid,.pv .five,.pv .qk,.pv .anat,.pv .values,.pv .gl,.pv .cards3s,.pv .flow,.pv .stats{display:block}.pv .pill,.pv .code,.pv .pol{border:none;background:none;padding:0;color:#1d2522}
 .pv .five .c>*,.pv .go>*,.pv .values .v>*,.pv .anat .c>*,.pv .gl .c>*,.pv .st>*,.pv .qk .c>*{display:block}.pv .gl .c .ar{display:block}
 .pv .eyebrow{font-size:8.5pt;color:#555;letter-spacing:.06em}.pv .rank li{border:none;padding:1px 0}`;
+/* ---- CSV untuk Google Sheet (tanpa baris tajuk; lajur sepadan tab Data_*) ---- */
+const csvCell=v=>{v=v==null?"":String(v).replace(/\r?\n/g," ");return /[",;]/.test(v)||/^\s|\s$/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
+const csvRows=rows=>rows.map(r=>r.map(csvCell).join(",")).join("\n")+"\n";
+const ymd=s=>{const m=/^(\d{4})-(\d{2})/.exec(s||"");return m?[+m[1],+m[2]]:[new Date().getFullYear(),new Date().getMonth()+1]};
+function csvAudit(){const A=store.get("sccp-audit",null)||newAudit();const its=auditItems(A);const [y,mo]=ymd(A.meta.date);
+  const sj={dept:"Jabatan",doc:"Dokumen",k:"Isu Kritikal",all:"Semua isu"}[A.meta.scope];const sv=A.meta.scope==="dept"?DEPTS[A.meta.val]:A.meta.scope==="doc"?DOCMAP[A.meta.val].no:sj;
+  const id=A.meta.ref||((A.meta.date||"")+" "+(A.meta.dept||sv));
+  return csvRows(its.map(i=>{const r=A.res[i.c]||{};const rk=(r.r||[]).map((v,j)=>v?i.r[j]:null).filter(Boolean);
+    return [id,A.meta.date||"",y,mo,A.meta.ref||"",A.meta.aud||"",A.meta.dept||"",sj,sv,i.c,docOf(i.c),i.t,i.l==="K"?"Kritikal":"Tidak Kritikal",{P:"Patuh",X:"Tidak Patuh",NA:"T/B"}[r.s]||"Belum dinilai",rk.join("; "),r.n||""]}))}
+function nilaiRow(S,at){const s=nilaiScore(S);const d=(S.meta.masa||at||new Date().toISOString()).slice(0,10);const [y,mo]=ymd(d);const all=NILAI[S.cat].s.flatMap(x=>x.i);
+  return [(S.meta.nama||"")+" "+d+" "+S.cat,d,y,mo,S.meta.nama||"",S.meta.jaw||"",S.meta.jab||"","QLT 07-"+S.cat,NILAI[S.cat].cat.split(" (")[0],S.meta.tugas||"",S.meta.oleh||"",s.pct==null?"":s.pct,s.grade==="—"?"":s.grade,s.n,s.cnt.A,s.cnt.B,s.cnt.C,s.cnt.F,
+    ...Object.keys(VCOL).map(k=>{const p=s.per[k];return p&&p.n?Math.round(p.t/p.n):""}),...all.map(it=>S.g[it[0]]||""),S.note||""]}
+function csvNilai(allHist){const cur=store.get("sccp-nilai",null);const H=store.get("sccp-nilai-hist",[]);
+  const rows=allHist?H.map(h=>nilaiRow(h,h.at)):(cur?[nilaiRow(cur)]:[]);return csvRows(rows)}
+
 /* ---- shared document model: HTML -> blocks ---- */
 function toModel(html){
   const root=document.createElement("div");root.innerHTML=html;const out=[];
@@ -1465,6 +1489,49 @@ async function toPDF(doc){await loadScript("https://cdnjs.cloudflare.com/ajax/li
       y=pdf.lastAutoTable.finalY+4}});
   const n=pdf.getNumberOfPages();for(let i=1;i<=n;i++){pdf.setPage(i);font(false,false,7.5);pdf.setTextColor(120,120,120);pdf.text(san("SCCP PUSRAWI One Stop Center · "+doc.title),L,H-9);pdf.text(`Halaman ${i} / ${n}`,210-R,H-9,{align:"right"});pdf.setDrawColor(210,215,212);pdf.setLineWidth(.2);pdf.line(L,H-12,210-R,H-12)}
   return pdf.output("blob")}
+
+/* ================= GOOGLE SHEET GUIDE ================= */
+function vGsheet(v){
+  const AC=["ID_Audit","Tarikh","Tahun","Bulan","No_Rujukan","Juruaudit","Lokasi","Jenis_Skop","Skop","Kod_Isu","Dokumen","Isu","Tahap","Status","Rekod_Disemak","Catatan"];
+  const NCs=["ID_Penilaian","Tarikh","Tahun","Bulan","Nama","Jawatan","Jabatan","No_Borang","Kategori","Tugasan","Penilai","Markah","Gred","Bil_Dinilai","Bil_A","Bil_B","Bil_C","Bil_F","Professionalism % … Integrity % (7 lajur)","T1 … T27 (gred setiap tindakan)","Catatan"];
+  const S=(t,items)=>`<section class="stack"><h2>${t}</h2><ol class="steps">${items.map(x=>`<li><div><b>${x[0]}</b><span>${x[1]}</span></div></li>`).join("")}</ol></section>`;
+  v.innerHTML=`<header class="stack"><span class="eyebrow">Laporan · Google Sheet</span><h1>Panduan A–Z: dashboard Audit dan Penilaian Nilai Teras</h1>
+  <p class="lede">Portal ini menyimpan draf dalam pelayar sahaja. Untuk rekod berpusat dan dashboard, data dieksport sebagai CSV lalu diimport ke satu Google Sheet induk yang telah siap dengan formula dan carta.</p>
+  <div class="note">Portal tidak boleh menghantar data terus ke Google Sheet kerana artifact menyekat sambungan ke laman luar. CSV ialah jambatan yang selamat: juruaudit menyemak dahulu, kemudian import.</div></header>
+  ${S("A. Sediakan Google Sheet induk (sekali sahaja)",[
+   ["Dapatkan templat","Gunakan fail templat <b>SCCP_PUSRAWI_Dashboard_Audit_NilaiTeras.xlsx</b> (dibekalkan bersama portal). Ia mengandungi tab Panduan, Dashboard_Audit, Dashboard_Nilai, Data_Audit, Data_Nilai, Senarai_Isu (148 isu) dan Senarai."],
+   ["Muat naik ke Google Drive","Buka drive.google.com → Baharu → Muat naik fail → pilih templat."],
+   ["Tukar kepada Google Sheets","Buka fail → Fail → Simpan sebagai Helaian Google. Gunakan salinan Google Sheets ini sahaja mulai sekarang; fail .xlsx asal boleh dipadam."],
+   ["Namakan dan letak di folder unit","Cth. “SCCP PUSRAWI — Dashboard 2026” dalam folder Jabatan Kualiti / Perundangan & Perkhidmatan Syariah."],
+   ["Tetapkan akses","Kongsi → Editor untuk juruaudit dan ketua yang mengimport data; Viewer untuk pengurusan yang hanya melihat dashboard."]])}
+  ${S("B. Rekod audit SCCP ke Google Sheet",[
+   ["Lengkapkan audit dalam portal","Audit SCCP Terperinci → isi skop, tarikh, juruaudit, lokasi, no. rujukan; tanda status setiap isu dan catatan."],
+   ["Muat turun CSV","Dalam kotak ringkasan → <b>⬇ CSV untuk Google Sheet</b>. Satu baris bagi setiap isu dalam skop (termasuk yang belum dinilai)."],
+   ["Import ke tab Data_Audit","Buka Google Sheet induk → klik tab <b>Data_Audit</b> → Fail → Import → Muat naik → pilih CSV."],
+   ["Pilih tetapan import","Lokasi import: <b>Tambah pada helaian semasa (Append to current sheet)</b> · Jenis pemisah: <b>Koma</b> · kekalkan tanda “Tukar teks kepada nombor, tarikh dan formula” → Import data."],
+   ["Semak","Baris baharu muncul di bawah data sedia ada. Baris tajuk (baris 1) tidak berubah — CSV portal sengaja tiada baris tajuk."],
+   ["Mula audit seterusnya","Kembali ke portal → ↺ Kosongkan & mula semula."]])}
+  ${S("C. Rekod Penilaian Nilai Teras ke Google Sheet",[
+   ["Isi borang QLT 07","Pilih kategori (K1/K2/K3), isi maklumat — <b>pilih Jabatan daripada senarai</b> supaya dashboard jabatan tepat — dan beri gred."],
+   ["Simpan ke sejarah","Tekan “Simpan ke sejarah & mula baharu” selepas setiap wargakerja."],
+   ["Muat turun CSV","<b>⬇ CSV semua sejarah</b> untuk semua penilaian yang disimpan, atau <b>⬇ CSV borang ini</b> untuk satu borang sahaja."],
+   ["Import ke tab Data_Nilai","Tab <b>Data_Nilai</b> → Fail → Import → Muat naik → Tambah pada helaian semasa → Koma → Import data."],
+   ["Elak berganda","Selepas import “semua sejarah”, padam sejarah lama dalam portal (butang ×) supaya tidak diimport semula, atau gunakan Data → Pembersihan data → Alih keluar pendua."]])}
+  ${S("D. Membaca dashboard",[
+   ["Tapis mengikut tahun","Isi sel <b>C4</b> di Dashboard_Audit / Dashboard_Nilai (cth. 2026). Kosongkan untuk semua tahun. Jangan ubah sel C5."],
+   ["Dashboard_Audit","Bil. audit, isu dinilai, % pematuhan, Tidak Patuh Kritikal; taburan status; pematuhan mengikut 24 dokumen dan 29 jabatan (warna merah–kuning–hijau); trend bulanan; 10 isu paling kerap Tidak Patuh; carta."],
+   ["Dashboard_Nilai","Bil. penilaian, wargakerja, purata markah, % gred A/B, perlu bimbingan (C/F); taburan gred; purata tujuh nilai teras; mengikut kategori borang dan jabatan; trend bulanan; carta."],
+   ["Analisis lanjut","Data → Tapis atau Sisip → Jadual pangsi pada tab Data_* untuk lokasi, juruaudit atau penilai tertentu."]])}
+  ${S("E. Peraturan penting",[
+   ["Jangan ubah struktur","Jangan tambah, padam atau susun semula lajur dalam Data_Audit / Data_Nilai, dan jangan padam baris dalam Senarai_Isu."],
+   ["Satu Google Sheet induk","Semua juruaudit import ke fail yang sama supaya dashboard lengkap."],
+   ["Kerahsiaan","Data penilaian wargakerja bersifat peribadi — hadkan akses Editor/Viewer kepada yang berkaitan sahaja."],
+   ["Masalah biasa","Angka dashboard 0 → semak C4 (tahun) atau lajur Tahun dalam data mesti nombor (import dengan tanda “Tukar teks kepada nombor”). Data masuk ke lajur salah → pastikan pemisah Koma."]])}
+  <section class="grid g2">
+    <div class="card stack"><h3>Lajur Data_Audit (16)</h3><p style="font-size:.86rem">${AC.map((c,i)=>`<span class="code" style="margin:0 4px 4px 0;display:inline-block;white-space:normal">${String.fromCharCode(65+i)} · ${c}</span>`).join("")}</p></div>
+    <div class="card stack"><h3>Lajur Data_Nilai (53)</h3><p style="font-size:.86rem">${NCs.map(c=>`<span class="code" style="margin:0 4px 4px 0;display:inline-block;white-space:normal">${c}</span>`).join("")}</p></div>
+  </section>`;
+}
 
 /* ================= THEME ================= */
 function applyTheme(t){document.documentElement.setAttribute("data-theme",t);$$("[data-theme-set]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.themeSet===t))}
