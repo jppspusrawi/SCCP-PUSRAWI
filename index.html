@@ -25,11 +25,13 @@
 <style>
 /* Layout: controlled-document portal — sticky masthead, left index rail (desktop) / scrolling tab strip (phone), single reading column per view. */
 :root{
-  --bg:#F6F7F4; --surface:#FFFFFF; --sunk:#EEF1EE; --ink:#2E3835; --muted:#616D69; --line:#DCE3DF;
-  --brand:#1F6B5A; --brand-ink:#FFFFFF; --brand-soft:#E3F0EB;
-  --gold:#8C6A22; --gold-soft:#F6EEDC;
-  --k:#B03A2E; --k-soft:#FBECEA; --tk:#3F6282; --tk-soft:#E9EFF5;
-  --ok:#2E7D52; --ok-soft:#E5F2EA; --warn:#A0661A; --warn-soft:#FBF0DE;
+  --bg:#E9EEEC; --surface:#FFFFFF; --sunk:#F1F4F3; --ink:#1C2825; --muted:#475551; --line:#C9D3CF;
+  --brand:#11604F; --brand-ink:#FFFFFF; --brand-soft:#DDEFE8;
+  --gold:#7A5A12; --gold-soft:#FBF3E1;
+  --k:#A3281D; --k-soft:#FBE9E6; --tk:#2F5577; --tk-soft:#E6EEF6;
+  --ok:#1E6E44; --ok-soft:#E3F3E9; --warn:#8A5300; --warn-soft:#FCF0DC;
+  --box-kr:#EDF3FA; --box-kr-b:#B9CFE6; --box-rk:#ECF6EF; --box-rk-b:#B7DCC3; --box-tp:#F2F4F3; --box-tp-b:#D3DBD8; --box-dl-b:#E6D2A3;
+  --gAM:#11604F; --gPK:#2F5F9E; --gPP:#9A5B08; --gSK:#6D4A9C;
   --vP:#2E6DA4; --vU:#7A5AA6; --vS:#2E8B57; --vR:#C0628A; --vA:#C27C1A; --vW:#1E8C8C; --vI:#8A5A3C;
   --f-display:"Source Sans 3","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
   --f-body:"Source Sans 3","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
@@ -37,25 +39,29 @@
   --f-ar:"Amiri","Traditional Arabic","Scheherazade New","Noto Naskh Arabic",serif;
   --r:10px; --shadow:0 1px 2px rgba(20,40,34,.05),0 4px 14px rgba(20,40,34,.04);
 }
-/* Soft dark ("Lembut") — low-contrast, no near-black, no pure white text */
+/* Gelap — kontras tinggi yang selesa, tanpa putih/hitam mutlak */
 @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
-  --bg:#1E2624; --surface:#262F2D; --sunk:#2C3633; --ink:#D5DDD9; --muted:#9DA9A4; --line:#36413E;
-  --brand:#86C3B2; --brand-ink:#16221F; --brand-soft:#2D423C;
-  --gold:#D4B06A; --gold-soft:#3A3426;
-  --k:#E8998F; --k-soft:#43302D; --tk:#9DB6CC; --tk-soft:#2B3540;
-  --ok:#8DCBA5; --ok-soft:#2A3D33; --warn:#E0B36E; --warn-soft:#3F3527;
-  --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.15); color-scheme:dark }}
+  --bg:#101816; --surface:#1A2421; --sunk:#212C29; --ink:#E1E8E5; --muted:#A7B5B0; --line:#33433E;
+  --brand:#7DD0B9; --brand-ink:#0B1F19; --brand-soft:#1E3A32;
+  --gold:#E3BE6E; --gold-soft:#2E2717;
+  --k:#F29A8F; --k-soft:#3A201D; --tk:#9DC0E0; --tk-soft:#1C2A38;
+  --ok:#86D2A5; --ok-soft:#183126; --warn:#E8B464; --warn-soft:#352A16;
+  --box-kr:#1A2633; --box-kr-b:#2E4760; --box-rk:#182B22; --box-rk-b:#2C4F3C; --box-tp:#212C29; --box-tp-b:#3A4945; --box-dl-b:#5A4A25;
+  --gAM:#7DD0B9; --gPK:#8FB6EA; --gPP:#E8B464; --gSK:#C3A6EA;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.25); color-scheme:dark }}
 :root[data-theme="dark"]{
-  --bg:#1E2624; --surface:#262F2D; --sunk:#2C3633; --ink:#D5DDD9; --muted:#9DA9A4; --line:#36413E;
-  --brand:#86C3B2; --brand-ink:#16221F; --brand-soft:#2D423C;
-  --gold:#D4B06A; --gold-soft:#3A3426;
-  --k:#E8998F; --k-soft:#43302D; --tk:#9DB6CC; --tk-soft:#2B3540;
-  --ok:#8DCBA5; --ok-soft:#2A3D33; --warn:#E0B36E; --warn-soft:#3F3527;
-  --shadow:0 1px 2px rgba(0,0,0,.2),0 4px 14px rgba(0,0,0,.15); color-scheme:dark }
+  --bg:#101816; --surface:#1A2421; --sunk:#212C29; --ink:#E1E8E5; --muted:#A7B5B0; --line:#33433E;
+  --brand:#7DD0B9; --brand-ink:#0B1F19; --brand-soft:#1E3A32;
+  --gold:#E3BE6E; --gold-soft:#2E2717;
+  --k:#F29A8F; --k-soft:#3A201D; --tk:#9DC0E0; --tk-soft:#1C2A38;
+  --ok:#86D2A5; --ok-soft:#183126; --warn:#E8B464; --warn-soft:#352A16;
+  --box-kr:#1A2633; --box-kr-b:#2E4760; --box-rk:#182B22; --box-rk-b:#2C4F3C; --box-tp:#212C29; --box-tp-b:#3A4945; --box-dl-b:#5A4A25;
+  --gAM:#7DD0B9; --gPK:#8FB6EA; --gPP:#E8B464; --gSK:#C3A6EA;
+  --shadow:0 1px 2px rgba(0,0,0,.35),0 4px 14px rgba(0,0,0,.25); color-scheme:dark }
 
 *{box-sizing:border-box}
 html{scroll-padding-top:120px}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:var(--fs,16px);line-height:1.7;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:var(--fs,16px);line-height:1.75;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
 a{color:var(--brand)}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:4px}
@@ -353,6 +359,28 @@ mark{background:var(--gold-soft);color:inherit;padding:0 2px;border-radius:2px}
 .umguide{background:var(--brand-soft);border-radius:8px;padding:10px 12px;font-size:.86rem}
 .umguide ul{margin:4px 0 0;padding-left:1.2em;display:flex;flex-direction:column;gap:3px}
 
+
+/* Kotak berwarna untuk bacaan */
+.blk{border-radius:10px;padding:12px 14px;border:1px solid var(--box-tp-b);background:var(--box-tp)}
+.blk.kr{background:var(--box-kr);border-color:var(--box-kr-b)}
+.blk.kr h5{color:var(--tk)}
+.blk.rk{background:var(--box-rk);border-color:var(--box-rk-b)}
+.blk.rk h5{color:var(--ok)}
+.blk.xr{background:var(--surface);border-style:dashed}
+.blk.nob{background:none;border:none;padding:0}
+.dalil{border:1px solid var(--box-dl-b)}
+details.it{border-left:5px solid var(--gc,var(--line))}
+details.it[data-g="AM"]{--gc:var(--gAM)} details.it[data-g="PK"]{--gc:var(--gPK)} details.it[data-g="PP"]{--gc:var(--gPP)} details.it[data-g="SK"]{--gc:var(--gSK)}
+.docgrp>header{border-left:5px solid var(--gc,var(--brand));padding:8px 12px;background:var(--surface);border-radius:8px;border-top:1px solid var(--line);border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
+.docgrp[data-g="AM"]{--gc:var(--gAM)} .docgrp[data-g="PK"]{--gc:var(--gPK)} .docgrp[data-g="PP"]{--gc:var(--gPP)} .docgrp[data-g="SK"]{--gc:var(--gSK)}
+.go{border-top:4px solid var(--gc,var(--brand))}
+.go:nth-child(6n+1){--gc:var(--gAM)} .go:nth-child(6n+2){--gc:var(--gPK)} .go:nth-child(6n+3){--gc:var(--gPP)} .go:nth-child(6n+4){--gc:var(--gSK)} .go:nth-child(6n+5){--gc:var(--k)} .go:nth-child(6n+6){--gc:var(--gold)}
+.arow ol{background:var(--box-kr);border:1px solid var(--box-kr-b);border-radius:8px;padding:8px 12px 8px 2.2em}
+.umguide{border:1px solid var(--box-rk-b);background:var(--box-rk)}
+.mod{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:6px}
+.mod+.mod{border-top:1px solid var(--line)}
+p,li{max-width:78ch}
+
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 
@@ -363,7 +391,7 @@ mark{background:var(--gold-soft);color:inherit;padding:0 2px;border-radius:2px}
     <div class="mast-t"><b>SCCP PUSRAWI · One Stop Center</b><span>Hospital Pakar PUSRAWI Kuala Lumpur · Panduan Dalaman Pematuhan Syariah (MS 1900:2014)</span></div>
     <div class="gsearch"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="gq" type="search" placeholder="Cari isu, kod, borang…" aria-label="Carian pantas"></div>
     <span class="fsz" role="group" aria-label="Saiz tulisan"><button data-fs="-1" aria-label="Kecilkan tulisan">A−</button><button data-fs="1" aria-label="Besarkan tulisan">A+</button></span>
-    <span class="theme" role="group" aria-label="Tema paparan"><button data-theme-set="light">Cerah</button><button data-theme-set="dark">Lembut</button></span>
+    <span class="theme" role="group" aria-label="Tema paparan"><button data-theme-set="light">Cerah</button><button data-theme-set="dark">Gelap</button></span>
     <span class="stamp">Dokumen Dalaman</span>
   </div>
   <nav class="tabs" id="tabs" aria-label="Navigasi"></nav>
@@ -723,13 +751,13 @@ function xrefLinks(txt){
 /* ================= NAV ================= */
 const ROUTES=[
  {id:"utama",t:"Utama",grp:"Mula"},
- {id:"latihan",t:"Modul Latihan",grp:"Belajar"},
- {id:"kuiz",t:"Kuiz Penilaian",grp:"Belajar"},
  {id:"pustaka",t:"Pustaka SCCP",grp:"Rujukan",n:TOTAL},
  {id:"jabatan",t:"Mengikut Jabatan",grp:"Rujukan"},
  {id:"pantas",t:"Rujukan Pantas",grp:"Rujukan"},
  {id:"borang",t:"Indeks Borang & Polisi",grp:"Rujukan"},
  {id:"glosari",t:"Glosari Istilah",grp:"Rujukan"},
+ {id:"latihan",t:"Modul Latihan",grp:"Belajar"},
+ {id:"kuiz",t:"Kuiz Penilaian Kefahaman SCCP",grp:"Belajar"},
  {id:"nilai",t:"Penilaian Nilai Teras",grp:"Penilaian"},
  {id:"umum",t:"Semakan Syariah Umum",grp:"Audit"},
  {id:"audit",t:"Audit SCCP Terperinci",grp:"Audit"},
@@ -838,7 +866,7 @@ function vHome(v){
 function vTrain(v){
   v.innerHTML=`
   <header class="stack"><span class="eyebrow">Modul Latihan · Anggaran 45–60 minit</span><h1>Asas SCCP untuk semua wargakerja</h1>
-  <p class="lede">Ikuti modul mengikut turutan. Setiap modul merujuk dokumen SCCP yang berkenaan. Selesai modul 7, uji kefahaman di bahagian Kuiz Penilaian.</p></header>
+  <p class="lede">Ikuti modul mengikut turutan. Setiap modul merujuk dokumen SCCP yang berkenaan. Selesai modul 7, uji kefahaman di bahagian Kuiz Penilaian Kefahaman SCCP.</p></header>
 
   <article class="mod"><div class="no">1</div><div class="body">
     <h2>Apa itu SCCP dan kaitannya dengan MS 1900:2014</h2>
@@ -916,7 +944,7 @@ function vTrain(v){
       <li><div><b>Pertembungan maqasid dalam keputusan klinikal</b><span>Rekod keputusan secara bertulis dan rujuk Jabatan Perundangan dan Perkhidmatan Syariah untuk pengesahan.</span></div></li>
       <li><div><b>Gangguan seksual</b><span>Laporkan segera melalui Borang Aduan Gangguan Seksual (JSM 05-01). <span class="code">AM07-1.2</span></span></div></li>
     </ol>
-    <div class="row"><a class="btn pri" href="#kuiz">Mula Kuiz Penilaian</a><a class="btn" href="#jabatan">Lihat SCCP jabatan saya</a></div>
+    <div class="row"><a class="btn pri" href="#kuiz">Mula Kuiz Penilaian Kefahaman SCCP</a><a class="btn" href="#jabatan">Lihat SCCP jabatan saya</a></div>
   </div></article>`;
   $$("[data-lib]",v).forEach(a=>a.onclick=e=>{e.preventDefault();const[doc,q]=a.dataset.lib.split("|");store.set("sccp-lib",{doc,lvl:"",q:"",pre:q});location.hash="#pustaka"});
 }
@@ -925,14 +953,14 @@ function vTrain(v){
 function itemCard(it,q){
   const hl=s=>{s=esc(s);if(!q)return s;try{return s.replace(new RegExp("("+q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")","gi"),"<mark>$1</mark>")}catch(e){return s}};
   const d=DOCMAP[docOf(it.c)];
-  return `<details class="it" id="it-${it.c}" data-c="${it.c}">
+  return `<details class="it" id="it-${it.c}" data-c="${it.c}" data-g="${d.g}">
   <summary><span class="code">${it.c}</span><span class="t">${hl(it.t)}<small>${esc(d.no)} · ${esc(d.t)}${it.m0?" · "+esc(it.m0):""}</small></span><span class="r">${it.p?`<span class="pol">${esc(it.p)}</span>`:""}<span class="pill ${it.l}">${it.l}</span></span></summary>
   <div class="it-body">
-    <div class="blk"><h5>Kriteria penilaian</h5><ol>${it.k.map(k=>`<li>${hl(k)}</li>`).join("")}</ol></div>
-    <div class="blk"><h5>Rekod penilaian (bukti)</h5>${it.r.length?`<ol>${it.r.map(r=>`<li>${hl(r)}</li>`).join("")}</ol>`:`<p class="muted">—</p>`}${it.n?`<div class="note" style="margin-top:8px">${esc(it.n)}</div>`:""}</div>
+    <div class="blk kr"><h5>Kriteria penilaian</h5><ol>${it.k.map(k=>`<li>${hl(k)}</li>`).join("")}</ol></div>
+    <div class="blk rk"><h5>Rekod penilaian (bukti)</h5>${it.r.length?`<ol>${it.r.map(r=>`<li>${hl(r)}</li>`).join("")}</ol>`:`<p class="muted">—</p>`}${it.n?`<div class="note" style="margin-top:8px">${esc(it.n)}</div>`:""}</div>
     <div class="blk full"><h5>Terpakai untuk</h5><p>${hl(it.u)}</p></div>
-    <div class="blk full"><div class="dalil">${it.a?`<p class="ar">${it.a}</p><p class="mk">${esc(it.m)}</p>`:""}<div class="src"><b>Dalil & sumber:</b> ${xrefLinks(it.d)}</div></div></div>
-    ${it.x?`<div class="blk full"><h5>Rujukan silang</h5><p style="font-size:.9rem">${xrefLinks(it.x)}</p></div>`:""}
+    <div class="blk full nob"><div class="dalil">${it.a?`<p class="ar">${it.a}</p><p class="mk">${esc(it.m)}</p>`:""}<div class="src"><b>Dalil & sumber:</b> ${xrefLinks(it.d)}</div></div></div>
+    ${it.x?`<div class="blk full xr"><h5>Rujukan silang</h5><p style="font-size:.9rem">${xrefLinks(it.x)}</p></div>`:""}
   </div></details>`;
 }
 function vLib(v){
@@ -957,7 +985,7 @@ function vLib(v){
     if(!its.length){$("#lres").innerHTML=`<div class="empty">Tiada isu sepadan. Cuba kata kunci lain atau kosongkan penapis.</div>`;return}
     const groups={};its.forEach(i=>{(groups[docOf(i.c)]=groups[docOf(i.c)]||[]).push(i)});
     $("#lres").innerHTML=Object.keys(groups).map(dc=>{const d=DOCMAP[dc];let last="";
-      return `<section class="docgrp"><header><h3>${esc(d.no)} · ${esc(d.t)}</h3><span class="meta">Kuat kuasa ${esc(d.kk)} · Pindaan ${esc(d.pin)} · ${groups[dc].length} isu</span></header>${groups[dc].map(i=>{let h="";if(i.m0&&i.m0!==last){last=i.m0;h=`<div class="sub">${esc(i.m0)}</div>`}return h+itemCard(i,q)}).join("")}</section>`}).join("");
+      return `<section class="docgrp" data-g="${d.g}"><header><h3>${esc(d.no)} · ${esc(d.t)}</h3><span class="meta">Kuat kuasa ${esc(d.kk)} · Pindaan ${esc(d.pin)} · ${groups[dc].length} isu</span></header>${groups[dc].map(i=>{let h="";if(i.m0&&i.m0!==last){last=i.m0;h=`<div class="sub">${esc(i.m0)}</div>`}return h+itemCard(i,q)}).join("")}</section>`}).join("");
     LAST_LIST={title:st.doc?DOCMAP[st.doc].no+" "+DOCMAP[st.doc].t:"Semua dokumen SCCP",sub:[st.lvl?"Tahap "+st.lvl:"",st.q?"Kata kunci: "+st.q:""].filter(Boolean).join(" · "),items:its};
     openPending(v);
   };
@@ -988,7 +1016,7 @@ function vDept(v){
     $("#dsum").innerHTML=`<div class="stat"><b>${its.length}</b><span>Isu terpakai</span></div><div class="stat k"><b>${k}</b><span>Kritikal</span></div><div class="stat tk"><b>${its.length-k}</b><span>Tidak Kritikal</span></div>`;
     const groups={};its.forEach(i=>{(groups[docOf(i.c)]=groups[docOf(i.c)]||[]).push(i)});
     setTimeout(()=>openPending(v),0);
-    $("#dres").innerHTML=its.length?Object.keys(groups).map(dc=>`<section class="docgrp"><header><h3>${esc(DOCMAP[dc].no)} · ${esc(DOCMAP[dc].t)}</h3><span class="meta">${groups[dc].length} isu</span></header>${groups[dc].map(i=>itemCard(i,"")).join("")}</section>`).join(""):`<div class="empty">Tiada isu khusus. Pilih “Termasuk isu umum”.</div>`;
+    $("#dres").innerHTML=its.length?Object.keys(groups).map(dc=>`<section class="docgrp" data-g="${DOCMAP[dc].g}"><header><h3>${esc(DOCMAP[dc].no)} · ${esc(DOCMAP[dc].t)}</h3><span class="meta">${groups[dc].length} isu</span></header>${groups[dc].map(i=>itemCard(i,"")).join("")}</section>`).join(""):`<div class="empty">Tiada isu khusus. Pilih “Termasuk isu umum”.</div>`;
   };
   $("#dsel").onchange=draw;
   $$("[data-scope]",v).forEach(b=>b.onclick=()=>{scope=b.dataset.scope;$$("[data-scope]",v).forEach(x=>x.setAttribute("aria-pressed",x===b));draw()});
@@ -1185,21 +1213,44 @@ function vQuick(v){
 }
 
 /* ================= QUIZ ================= */
+function quizRow(who,res){const z=n=>String(n).padStart(2,"0");const t=new Date(res.at);
+  const d=t.getFullYear()+"-"+z(t.getMonth()+1)+"-"+z(t.getDate()),hm=z(t.getHours())+":"+z(t.getMinutes())+":"+z(t.getSeconds());
+  const pct=Math.round(res.score/QUIZ.length*100);const salah=res.ans.map((v,i)=>v?null:"S"+(i+1)).filter(Boolean).join(", ");
+  return [((who.staf||who.nama)+" "+d+" "+hm).trim(),d,hm,t.getFullYear(),t.getMonth()+1,who.nama,who.staf||"",who.jab,who.jaw||"",res.score,QUIZ.length,pct,pct>=80?"Lulus":"Gagal",res.n,salah||"-",...res.ans.map(v=>v?1:0)]}
+async function quizSync(row){if(IN_CLAUDE())return;try{const j=await gsSend({type:"kuiz",rows:[row]});console.info("[SCCP Google Sheet] kuiz direkod ("+(j.helaian||"")+")")}
+  catch(e){console.info("[SCCP Google Sheet] kuiz tidak dapat direkod: "+(e.message||e));const q=store.get("sccp-quiz-q",[]);q.push(row);store.set("sccp-quiz-q",q.slice(-50))}}
+async function quizFlush(){if(IN_CLAUDE())return;const q=store.get("sccp-quiz-q",[]);if(!q.length)return;try{await gsSend({type:"kuiz",rows:q});store.set("sccp-quiz-q",[])}catch(e){}}
 function vQuiz(v){
-  let idx=0,score=0,answered=false;const order=QUIZ.map((_,i)=>i);
+  let idx=0,score=0,answered=false,ans=[];
   const best=store.get("sccp-quiz-best",null);
-  v.innerHTML=`<header class="stack"><span class="eyebrow">Kuiz Penilaian · ${QUIZ.length} soalan</span><h1>Uji kefahaman SCCP anda</h1><p class="lede">Setiap soalan disertakan penjelasan dan kod isu rujukan. Markah lulus dicadangkan 80%.${best!=null?` Markah terbaik anda di pelayar ini: <b>${best}/${QUIZ.length}</b>.`:""}</p></header><div class="qz card stack" id="qz"></div>`;
-  const draw=()=>{const qz=$("#qz");
+  v.innerHTML=`<header class="stack"><span class="eyebrow">Kuiz Penilaian Kefahaman SCCP · ${QUIZ.length} soalan</span><h1>Uji kefahaman SCCP anda</h1><p class="lede">Setiap soalan disertakan penjelasan dan kod isu rujukan. Markah lulus 80%.${best!=null?` Markah terbaik anda di pelayar ini: <b>${best}/${QUIZ.length}</b>.`:""}</p></header><div class="qz card stack" id="qz"></div>`;
+  const form=()=>{const w=store.get("sccp-quiz-who",{});const qz=$("#qz");
+    qz.innerHTML=`<span class="eyebrow">Maklumat peserta</span><h3>Isi maklumat sebelum mula</h3>
+    <p class="muted" style="font-size:.9rem">Keputusan kuiz direkod dalam rekod latihan SCCP hospital untuk tujuan pemantauan kefahaman dan perancangan latihan.</p>
+    <div class="grid g2"><div class="field"><label for="qzN">Nama penuh *</label><input id="qzN" value="${esc(w.nama||"")}" autocomplete="name"></div>
+    <div class="field"><label for="qzS">No. staf</label><input id="qzS" value="${esc(w.staf||"")}" placeholder="cth. P01234"></div>
+    <div class="field"><label for="qzJ">Jabatan / unit *</label><input id="qzJ" list="qzJL" value="${esc(w.jab||"")}" placeholder="Pilih dari senarai"><datalist id="qzJL">${Object.values(DEPTS).sort().map(n=>`<option value="${esc(n)}">`).join("")}</datalist></div>
+    <div class="field"><label for="qzW">Jawatan</label><input id="qzW" value="${esc(w.jaw||"")}" placeholder="cth. Jururawat U29"></div></div>
+    <div class="row"><button class="btn pri" id="qzGo">Mula kuiz</button><span id="qzMsg" class="muted" style="font-size:.88rem"></span></div>`;
+    $("#qzGo").onclick=()=>{const who={nama:$("#qzN").value.trim().replace(/\s+/g," "),staf:$("#qzS").value.trim().toUpperCase(),jab:$("#qzJ").value.trim(),jaw:$("#qzW").value.trim()};
+      if(!who.nama||!who.jab){$("#qzMsg").textContent="Sila isi nama dan jabatan.";($("#qzN").value.trim()?$("#qzJ"):$("#qzN")).focus();return}
+      store.set("sccp-quiz-who",who);idx=0;score=0;ans=[];draw()}};
+  const draw=()=>{const qz=$("#qz");const who=store.get("sccp-quiz-who",{});
     if(idx>=QUIZ.length){const pct=Math.round(score/QUIZ.length*100);if(best==null||score>best)store.set("sccp-quiz-best",score);
-      qz.innerHTML=`<span class="eyebrow">Keputusan</span><div style="font-family:var(--f-display);font-size:3rem;line-height:1;color:${pct>=80?"var(--ok)":"var(--warn)"}">${score}/${QUIZ.length}</div><p>${pct>=80?"Tahniah — anda mencapai tahap lulus. Teruskan rujukan harian melalui Pustaka SCCP.":"Belum mencapai 80%. Ulang kaji Modul Latihan dan cuba sekali lagi."}</p><div class="row"><button class="btn pri" id="qAgain">Cuba lagi</button><a class="btn" href="#latihan">Ulang kaji modul</a></div>`;
-      $("#qAgain").onclick=()=>{idx=0;score=0;draw()};return}
-    const q=QUIZ[order[idx]];answered=false;
-    qz.innerHTML=`<div class="qprog"><i style="width:${idx/QUIZ.length*100}%"></i></div><span class="eyebrow">Soalan ${idx+1} daripada ${QUIZ.length}</span><h3>${esc(q.q)}</h3><div>${q.o.map((o,i)=>`<button class="opt" data-i="${i}">${String.fromCharCode(65+i)}. ${esc(o)}</button>`).join("")}</div><div id="qx"></div>`;
-    $$(".opt",qz).forEach(b=>b.onclick=()=>{if(answered)return;answered=true;const i=+b.dataset.i;const ok=i===q.a;if(ok)score++;
+      const key=(who.staf||who.nama)+"|"+who.jab,cnt=store.get("sccp-quiz-n",{});cnt[key]=(cnt[key]||0)+1;store.set("sccp-quiz-n",cnt);
+      quizSync(quizRow(who,{at:Date.now(),score,ans,n:cnt[key]}));
+      const wrong=ans.map((x,i)=>x?null:i).filter(x=>x!=null);
+      qz.innerHTML=`<span class="eyebrow">Keputusan · ${esc(who.nama)} · ${esc(who.jab)}</span><div style="font-family:var(--f-display);font-size:3rem;line-height:1;color:${pct>=80?"var(--ok)":"var(--warn)"}">${score}/${QUIZ.length} <span style="font-size:1.4rem">(${pct}%)</span></div><p>${pct>=80?"Tahniah — anda LULUS. Teruskan rujukan harian melalui Pustaka SCCP.":"Belum mencapai 80%. Ulang kaji Modul Latihan dan cuba sekali lagi."}</p>
+      ${wrong.length?`<div class="note"><b>Soalan yang perlu diulang kaji:</b><ol style="margin:.4em 0 0">${wrong.map(i=>`<li value="${i+1}">${esc(QUIZ[i].q)}${QUIZ[i].c?` <a href="#pustaka" data-open="${QUIZ[i].c}" class="mono" style="font-size:.8rem">${QUIZ[i].c} ↗</a>`:""}</li>`).join("")}</ol></div>`:""}
+      <div class="row"><button class="btn pri" id="qAgain">Cuba lagi</button><a class="btn" href="#latihan">Ulang kaji modul</a><button class="btn" id="qWho">Peserta lain</button></div>`;
+      $("#qAgain").onclick=()=>{idx=0;score=0;ans=[];draw()};$("#qWho").onclick=form;return}
+    const q=QUIZ[idx];answered=false;
+    qz.innerHTML=`<div class="qprog"><i style="width:${idx/QUIZ.length*100}%"></i></div><span class="eyebrow">Soalan ${idx+1} daripada ${QUIZ.length} · ${esc(who.nama||"")}</span><h3>${esc(q.q)}</h3><div>${q.o.map((o,i)=>`<button class="opt" data-i="${i}">${String.fromCharCode(65+i)}. ${esc(o)}</button>`).join("")}</div><div id="qx"></div>`;
+    $$(".opt",qz).forEach(b=>b.onclick=()=>{if(answered)return;answered=true;const i=+b.dataset.i;const ok=i===q.a;if(ok)score++;ans[idx]=ok;
       $$(".opt",qz).forEach(x=>{x.disabled=true;if(+x.dataset.i===q.a)x.classList.add("right")});if(!ok)b.classList.add("wrong");
       $("#qx").innerHTML=`<div class="note" style="border-color:${ok?"var(--ok)":"var(--k)"};background:${ok?"var(--ok-soft)":"var(--k-soft)"}"><b>${ok?"Betul.":"Kurang tepat."}</b> ${esc(q.e)} ${q.c?`<a href="#pustaka" data-open="${q.c}" class="mono" style="font-size:.8rem">${q.c} ↗</a>`:""}</div><div class="row" style="margin-top:10px"><button class="btn pri" id="qn">${idx+1<QUIZ.length?"Soalan seterusnya":"Lihat keputusan"}</button></div>`;
       $("#qn").onclick=()=>{idx++;draw()}})};
-  draw();
+  form();quizFlush();
 }
 
 /* ================= GLOSSARY ================= */
@@ -1344,7 +1395,7 @@ function vNilai(v){
 }
 
 /* ================= EXPORT PDF / WORD ================= */
-const EXPORTABLE={gsheet:"Panduan Dashboard Google Sheet",latihan:"Modul Latihan SCCP",kuiz:"Kuiz Penilaian SCCP",pustaka:"Pustaka SCCP",jabatan:"SCCP Mengikut Jabatan",pantas:"Rujukan Pantas Hukum",borang:"Indeks Borang dan Polisi",glosari:"Glosari Istilah",nilai:"Penilaian Pengamalan Nilai Teras",umum:"Senarai Semak Syariah Umum",audit:"Laporan Audit SCCP",susulan:"Tindakan Susulan SCCP"};
+const EXPORTABLE={gsheet:"Panduan Dashboard Google Sheet",latihan:"Modul Latihan SCCP",kuiz:"Kuiz Penilaian Kefahaman SCCP",pustaka:"Pustaka SCCP",jabatan:"SCCP Mengikut Jabatan",pantas:"Rujukan Pantas Hukum",borang:"Indeks Borang dan Polisi",glosari:"Glosari Istilah",nilai:"Penilaian Pengamalan Nilai Teras",umum:"Senarai Semak Syariah Umum",audit:"Laporan Audit SCCP",susulan:"Tindakan Susulan SCCP"};
 let DL=null,DLtried=false;
 /* Di claude.ai: guna keupayaan "downloads". Di laman web biasa (cth. GitHub Pages): muat turun terus melalui pelayar. */
 const WEB_DL={save:async({filename,data})=>{const MT={pdf:"application/pdf",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",csv:"text/csv;charset=utf-8"};
@@ -1407,7 +1458,7 @@ function buildPrint(r){const t=EXPORTABLE[r];let html="",file=slug(t)+"-"+today(
     file="Penilaian-Nilai-Teras-QLT07-"+S.cat+"-"+slug(S.meta.nama||"wargakerja")+"-"+today()}
   else if(r==="pustaka"||r==="jabatan"){const L=r==="pustaka"?LAST_LIST:LAST_DEPT;const items=L?L.items:ITEMS;
     html=head(L?L.title:t,(L&&L.sub?L.sub+" · ":"")+items.length+" isu")+items.map(itemBlock).join("");file=slug(L?L.title:t)+"-"+today()}
-  else if(r==="kuiz"){html=head("KUIZ PENILAIAN SCCP — SOALAN DAN SKEMA JAWAPAN",QUIZ.length+" soalan")+QUIZ.map((q,i)=>`<div class="pv-item"><h3>${i+1}. ${esc(q.q)}</h3><ol type="A">${q.o.map(o=>`<li>${esc(o)}</li>`).join("")}</ol><p><b>Jawapan:</b> ${String.fromCharCode(65+q.a)}. ${esc(q.o[q.a])}</p><p><i>${esc(q.e)}</i></p></div>`).join("")}
+  else if(r==="kuiz"){html=head("KUIZ PENILAIAN KEFAHAMAN SCCP — SOALAN DAN SKEMA JAWAPAN",QUIZ.length+" soalan")+QUIZ.map((q,i)=>`<div class="pv-item"><h3>${i+1}. ${esc(q.q)}</h3><ol type="A">${q.o.map(o=>`<li>${esc(o)}</li>`).join("")}</ol><p><b>Jawapan:</b> ${String.fromCharCode(65+q.a)}. ${esc(q.o[q.a])}</p><p><i>${esc(q.e)}</i></p></div>`).join("")}
   else html=head(t.toUpperCase(),"")+cloneView();
   return {title:t,file,html}}
 const PRINT_CSS=`.pvwrap{--bg:#fff;--surface:#fff;--sunk:#eef1ee;--ink:#1d2522;--muted:#555;--line:#c9d2ce;--brand:#1F6B5A;--brand-ink:#fff;--brand-soft:#e3f0eb;--gold:#8C6A22;--gold-soft:#f6eedc;--k:#B03A2E;--k-soft:#fbecea;--tk:#3F6282;--tk-soft:#e9eff5;--ok:#2E7D52;--ok-soft:#e5f2ea;--warn:#A0661A;--warn-soft:#fbf0de;color-scheme:light;background:#fff}
@@ -1535,19 +1586,26 @@ async function toPDF(doc){await loadScript("https://cdnjs.cloudflare.com/ajax/li
   return pdf.output("blob")}
 
 /* ================= GOOGLE SHEET GUIDE ================= */
-const GSCODE="/**\n * SCCP PUSRAWI \u2014 Penerima data dari portal One Stop Center\n * Tampal kod ini dalam: Extensions (Sambungan) \u2192 Apps Script \u2192 Code.gs\n * Kemudian: Deploy \u2192 New deployment \u2192 Web app \u2192 Execute as: Me \u2192 Who has access: Anyone\n */\nconst HELAIAN = { audit: 'Data_Audit', nilai: 'Data_Nilai' };\nconst LEBAR   = { audit: 16, nilai: 53 };   // bilangan lajur setiap tab\n\n/** Menu dalam Google Sheet */\nfunction onOpen() {\n  SpreadsheetApp.getUi().createMenu('SCCP PUSRAWI')\n    .addItem('1. Tetapkan token keselamatan', 'tetapkanToken')\n    .addItem('2. Lihat token semasa', 'lihatToken')\n    .addSeparator()\n    .addItem('Semak struktur helaian', 'semakStruktur')\n    .addToUi();\n}\n\nfunction tetapkanToken() {\n  const ui = SpreadsheetApp.getUi();\n  const r = ui.prompt('Token keselamatan',\n    'Masukkan kata kunci rahsia (cth. PUSRAWI-SCCP-2026). Kata kunci yang sama perlu diisi dalam portal \u2192 Dashboard Google Sheet \u2192 Tetapan.',\n    ui.ButtonSet.OK_CANCEL);\n  if (r.getSelectedButton() !== ui.Button.OK) return;\n  const t = r.getResponseText().trim();\n  if (t.length < 6) { ui.alert('Token terlalu pendek (sekurang-kurangnya 6 aksara).'); return; }\n  PropertiesService.getScriptProperties().setProperty('TOKEN', t);\n  ui.alert('Token disimpan. Tidak perlu deploy semula.');\n}\n\nfunction lihatToken() {\n  const t = PropertiesService.getScriptProperties().getProperty('TOKEN');\n  SpreadsheetApp.getUi().alert(t ? 'Token semasa: ' + t : 'Belum ada token. Pilih \"Tetapkan token keselamatan\".');\n}\n\nfunction semakStruktur() {\n  const ss = SpreadsheetApp.getActive(), msg = [];\n  Object.keys(HELAIAN).forEach(k => {\n    const sh = ss.getSheetByName(HELAIAN[k]);\n    msg.push(HELAIAN[k] + ': ' + (sh ? 'ADA (' + Math.max(0, sh.getLastRow() - 1) + ' baris data)' : 'TIADA \u2014 semak nama tab'));\n  });\n  SpreadsheetApp.getUi().alert(msg.join('\\n'));\n}\n\n/** Uji dari pelayar: buka URL Web App \u2014 mesti papar {\"ok\":true,...} */\nfunction doGet() {\n  return balas({ ok: true, mesej: 'Web App SCCP PUSRAWI aktif', helaian: SpreadsheetApp.getActive().getName() });\n}\n\n/** Terima data dari portal */\nfunction doPost(e) {\n  try {\n    const body = JSON.parse(e.postData.contents);\n    const token = PropertiesService.getScriptProperties().getProperty('TOKEN');\n    if (token && body.token !== token) return balas({ ok: false, error: 'Token tidak sah. Semak token dalam portal.' });\n    if (body.ping) return balas({ ok: true, mesej: 'Sambungan berjaya ke \"' + SpreadsheetApp.getActive().getName() + '\"' });\n\n    const nama = HELAIAN[body.type];\n    if (!nama) return balas({ ok: false, error: 'Jenis data tidak dikenali: ' + body.type });\n    const sh = SpreadsheetApp.getActive().getSheetByName(nama);\n    if (!sh) return balas({ ok: false, error: 'Tab ' + nama + ' tidak dijumpai.' });\n    const rows = (body.rows || []).map(r => bersih(r, LEBAR[body.type]));\n    if (!rows.length) return balas({ ok: false, error: 'Tiada data dihantar.' });\n\n    const kunci = LockService.getScriptLock();\n    kunci.waitLock(30000);\n    let diganti = 0;\n    try {\n      // Buang rekod lama dengan ID yang sama (hantar semula = kemas kini, bukan pendua)\n      const ids = new Set(rows.map(r => String(r[0])));\n      const akhir = sh.getLastRow();\n      if (akhir > 1) {\n        const w = LEBAR[body.type];\n        const data = sh.getRange(2, 1, akhir - 1, w).getValues();\n        const kekal = data.filter(r => !ids.has(String(r[0])));\n        diganti = data.length - kekal.length;\n        if (diganti > 0) {\n          sh.getRange(2, 1, akhir - 1, w).clearContent();\n          if (kekal.length) sh.getRange(2, 1, kekal.length, w).setValues(kekal);\n        }\n      }\n      sh.getRange(Math.max(sh.getLastRow(), 1) + 1, 1, rows.length, rows[0].length).setValues(rows);\n    } finally {\n      kunci.releaseLock();\n    }\n    return balas({ ok: true, ditambah: rows.length, diganti: diganti, helaian: nama });\n  } catch (err) {\n    return balas({ ok: false, error: String(err) });\n  }\n}\n\nfunction bersih(r, w) {\n  const out = [];\n  for (let i = 0; i < w; i++) {\n    let v = r[i] === undefined || r[i] === null ? '' : r[i];\n    if (typeof v === 'string' && /^[=+\\-@]/.test(v)) v = \"'\" + v;   // elak suntikan formula\n    out.push(v);\n  }\n  return out;\n}\n\nfunction balas(o) {\n  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);\n}\n";
+const GSCODE="/**\n * SCCP PUSRAWI \u2014 Penerima data dari portal One Stop Center (versi 2: Audit, Nilai Teras & Kuiz)\n * Tampal kod ini dalam: Extensions (Sambungan) \u2192 Apps Script \u2192 Code.gs\n * Selepas tampal: Deploy \u2192 Manage deployments \u2192 \u270f Edit \u2192 Version: New version \u2192 Deploy (URL kekal sama)\n */\nconst HELAIAN = { audit: 'Data_Audit', nilai: 'Data_Nilai', kuiz: 'Data_Kuiz' };\n\n/** Soalan Kuiz Penilaian Kefahaman SCCP (ikut turutan dalam portal) */\nconst SOALAN = [\n  \"Apakah maksud isu SCCP bertahap Kritikal (K)?\",\n  \"Piawaian SIRIM yang menjadi asas SCCP Hospital PUSRAWI ialah\u2026\",\n  \"Apabila maqasid bertembung, urutan keutamaan asas ialah\u2026\",\n  \"Etika 3S bagi perawat dan pesakit berlainan jantina ialah\u2026\",\n  \"Jika tiada peneman atau chaperon semasa rawatan di bilik tertutup, apa yang perlu dilakukan?\",\n  \"Borang yang digunakan untuk keizinan pesakit menggunakan ubat berunsur tidak halal ialah\u2026\",\n  \"Isu syariah yang timbul dalam operasi jabatan dirujuk melalui\u2026\",\n  \"Barang tidak dituntut (luqatah) disimpan berapa lama sebelum diserahkan kepada Baitulmal MAIWP?\",\n  \"Menurut Garis Panduan JAKIM (2013), penggunaan inhaler semasa berpuasa\u2026\",\n  \"Penamatan rawatan sokongan hayat bagi mati otak mesti disahkan oleh\u2026\",\n  \"Jenazah transgender diuruskan mengikut\u2026\",\n  \"Jika keluarga tidak mampu menanam uri (tembuni), hukumnya\u2026\",\n  \"Kontrak sewa beli patuh syariah yang digunakan untuk mesin MRI dan Digital X-ray ialah\u2026\",\n  \"Keutamaan pertama perawat bagi pesakit wanita menurut Majma' al-Fiqh al-Islami (1993) ialah\u2026\",\n  \"Kaedah 'al-dharurah tuqaddar bi qadariha' paling tepat diaplikasikan pada\u2026\",\n  \"Ubat-ubatan dan pewangi yang mengandungi alkohol, menurut Muzakarah Kali Ke-7 (1984), hukumnya\u2026\",\n  \"Huruf 'W' dalam nilai teras PUSRAWI mewakili\u2026\",\n  \"Anggota badan pembedahan yang boleh berjangkit diuruskan secara\u2026\"\n];\n\nconst KUIZ_LAJUR = ['ID_Kuiz', 'Tarikh', 'Masa', 'Tahun', 'Bulan', 'Nama', 'No_Staf', 'Jabatan', 'Jawatan',\n  'Markah', 'Jumlah_Soalan', 'Peratus', 'Keputusan', 'Cubaan_Ke', 'Soalan_Salah']\n  .concat(SOALAN.map((_, i) => 'S' + (i + 1)));\nconst LEBAR = { audit: 16, nilai: 53, kuiz: KUIZ_LAJUR.length };   // bilangan lajur setiap tab\nconst WARNA = '#11604F';\n\n/** Menu dalam Google Sheet */\nfunction onOpen() {\n  SpreadsheetApp.getUi().createMenu('SCCP PUSRAWI')\n    .addItem('1. Tetapkan token keselamatan', 'tetapkanToken')\n    .addItem('2. Lihat token semasa', 'lihatToken')\n    .addSeparator()\n    .addItem('3. Sediakan tab Kuiz & Dashboard_Kuiz', 'sediakanKuiz')\n    .addItem('Semak struktur helaian', 'semakStruktur')\n    .addToUi();\n}\n\nfunction tetapkanToken() {\n  const ui = SpreadsheetApp.getUi();\n  const r = ui.prompt('Token keselamatan',\n    'Masukkan kata kunci rahsia (cth. PUSRAWI-SCCP-2026). Kata kunci yang sama perlu diisi dalam portal \u2192 Sambung Google Sheet \u2192 Bahagian C.',\n    ui.ButtonSet.OK_CANCEL);\n  if (r.getSelectedButton() !== ui.Button.OK) return;\n  const t = r.getResponseText().trim();\n  if (t.length < 6) { ui.alert('Token terlalu pendek (sekurang-kurangnya 6 aksara).'); return; }\n  PropertiesService.getScriptProperties().setProperty('TOKEN', t);\n  ui.alert('Token disimpan. Tidak perlu deploy semula.');\n}\n\nfunction lihatToken() {\n  const t = PropertiesService.getScriptProperties().getProperty('TOKEN');\n  SpreadsheetApp.getUi().alert(t ? 'Token semasa: ' + t : 'Belum ada token. Pilih \"Tetapkan token keselamatan\".');\n}\n\nfunction semakStruktur() {\n  const ss = SpreadsheetApp.getActive(), msg = [];\n  Object.keys(HELAIAN).concat(['Dashboard_Kuiz']).forEach(k => {\n    const n = HELAIAN[k] || k, sh = ss.getSheetByName(n);\n    msg.push(n + ': ' + (sh ? 'ADA' + (HELAIAN[k] ? ' (' + Math.max(0, sh.getLastRow() - 1) + ' baris data)' : '') : 'TIADA'));\n  });\n  SpreadsheetApp.getUi().alert(msg.join('\\n'));\n}\n\n/* ================= KUIZ: cipta tab data & dashboard ================= */\nfunction sediakanKuiz() {\n  sediakanDataKuiz_();\n  binaDashboardKuiz_();\n  SpreadsheetApp.getUi().alert('Siap. Tab \"Data_Kuiz\" dan \"Dashboard_Kuiz\" telah disediakan.\\n\\nSekarang deploy versi baharu: Deploy \u2192 Manage deployments \u2192 \u270f \u2192 Version: New version \u2192 Deploy.');\n}\n\nfunction sediakanDataKuiz_() {\n  const ss = SpreadsheetApp.getActive();\n  let sh = ss.getSheetByName(HELAIAN.kuiz);\n  if (!sh) sh = ss.insertSheet(HELAIAN.kuiz);\n  if (sh.getMaxColumns() < KUIZ_LAJUR.length) sh.insertColumnsAfter(sh.getMaxColumns(), KUIZ_LAJUR.length - sh.getMaxColumns());\n  sh.getRange(1, 1, 1, KUIZ_LAJUR.length).setValues([KUIZ_LAJUR])\n    .setFontWeight('bold').setFontColor('#FFFFFF').setBackground(WARNA);\n  sh.setFrozenRows(1);\n  sh.setColumnWidth(1, 220); sh.setColumnWidth(6, 200); sh.setColumnWidth(8, 200); sh.setColumnWidth(15, 160);\n  const nota = sh.getRange(1, 16); nota.setNote('S1\u2026S' + SOALAN.length + ': 1 = betul, 0 = salah');\n  return sh;\n}\n\nfunction binaDashboardKuiz_() {\n  const ss = SpreadsheetApp.getActive();\n  let d = ss.getSheetByName('Dashboard_Kuiz');\n  if (d) { d.getCharts().forEach(c => d.removeChart(c)); d.clear(); d.clearConditionalFormatRules(); }\n  else d = ss.insertSheet('Dashboard_Kuiz');\n  const K = 'Data_Kuiz!';\n  const TAPIS = 'IF($C$4=\"\",' + K + 'D2:D>0,' + K + 'D2:D=$C$4)';\n\n  d.getRange('A1').setValue('DASHBOARD KUIZ PENILAIAN KEFAHAMAN SCCP \u2014 HOSPITAL PUSRAWI').setFontSize(15).setFontWeight('bold').setFontColor(WARNA);\n  d.getRange('A2').setValue('Dikemas kini automatik setiap kali wargakerja menamatkan kuiz di portal. Markah lulus: 80%.').setFontColor('#555555');\n  d.getRange('A4').setValue('Tapis tahun (kosongkan = semua tahun):').setFontWeight('bold');\n  d.getRange('C4').setBackground('#FFF6D6').setBorder(true, true, true, true, false, false);\n  d.getRange('C5').setFormula('=IF(C4=\"\",\">0\",C4)').setFontColor('#BBBBBB');\n  d.getRange('D4').setValue('\u2190 taip tahun, cth. 2026').setFontColor('#777777');\n\n  // KPI\n  const kpiL = ['Bil. cubaan', 'Bil. staf', 'Purata markah', 'Kadar lulus', 'Bil. lulus', 'Bil. gagal'];\n  const kpiF = [\n    '=COUNTIFS(' + K + 'D:D,$C$5)',\n    '=IFERROR(COUNTUNIQUE(FILTER(' + K + 'F2:F&\" | \"&' + K + 'H2:H,' + TAPIS + ')),0)',\n    '=IFERROR(AVERAGEIFS(' + K + 'L:L,' + K + 'D:D,$C$5)/100,0)',\n    '=IFERROR(E8/A8,0)',\n    '=COUNTIFS(' + K + 'D:D,$C$5,' + K + 'M:M,\"Lulus\")',\n    '=COUNTIFS(' + K + 'D:D,$C$5,' + K + 'M:M,\"Gagal\")'];\n  d.getRange(7, 1, 1, 6).setValues([kpiL]).setFontWeight('bold').setFontColor('#FFFFFF').setBackground(WARNA).setHorizontalAlignment('center');\n  d.getRange(8, 1, 1, 6).setFormulas([kpiF]).setFontSize(16).setFontWeight('bold').setHorizontalAlignment('center').setBackground('#ECF6EF');\n  d.getRange('C8:D8').setNumberFormat('0.0%');\n\n  // Mengikut jabatan (A11:E46)\n  d.getRange('A10').setValue('KEPUTUSAN MENGIKUT JABATAN').setFontWeight('bold').setFontColor(WARNA);\n  d.getRange(11, 1, 1, 5).setValues([['Jabatan', 'Bil. cubaan', 'Bil. staf', 'Purata markah', 'Kadar lulus']])\n    .setFontWeight('bold').setFontColor('#FFFFFF').setBackground(WARNA);\n  d.getRange('A12').setFormula('=IFERROR(SORT(UNIQUE(FILTER(' + K + 'H2:H,' + K + 'H2:H<>\"\",' + TAPIS + '))),\"\")');\n  const jf = [];\n  for (let r = 12; r <= 46; r++) {\n    jf.push([\n      '=IF(A' + r + '=\"\",\"\",COUNTIFS(' + K + 'H:H,A' + r + ',' + K + 'D:D,$C$5))',\n      '=IF(A' + r + '=\"\",\"\",IFERROR(COUNTUNIQUE(FILTER(' + K + 'F2:F,' + K + 'H2:H=A' + r + ',' + TAPIS + ')),0))',\n      '=IF(A' + r + '=\"\",\"\",IFERROR(AVERAGEIFS(' + K + 'L:L,' + K + 'H:H,A' + r + ',' + K + 'D:D,$C$5)/100,0))',\n      '=IF(A' + r + '=\"\",\"\",IFERROR(COUNTIFS(' + K + 'H:H,A' + r + ',' + K + 'D:D,$C$5,' + K + 'M:M,\"Lulus\")/B' + r + ',0))']);\n  }\n  d.getRange(12, 2, jf.length, 4).setFormulas(jf);\n  d.getRange('D12:E46').setNumberFormat('0.0%');\n\n  // Analisis soalan (G11:K\u2026)\n  const n = SOALAN.length, akhirS = 11 + n;\n  d.getRange('G10').setValue('ANALISIS SOALAN \u2014 soalan dengan % salah tinggi perlu diberi penekanan semula dalam latihan').setFontWeight('bold').setFontColor(WARNA);\n  d.getRange(11, 7, 1, 5).setValues([['Bil', 'Soalan', 'Bil. jawab', 'Bil. salah', '% salah']])\n    .setFontWeight('bold').setFontColor('#FFFFFF').setBackground(WARNA);\n  const sq = SOALAN.map((q, i) => {\n    const col = kolum_(16 + i), r = 12 + i;\n    return ['S' + (i + 1), q,\n      '=COUNTIFS(' + K + 'D:D,$C$5,' + K + col + ':' + col + ',\"<>\")',\n      '=COUNTIFS(' + K + 'D:D,$C$5,' + K + col + ':' + col + ',0)',\n      '=IFERROR(J' + r + '/I' + r + ',0)'];\n  });\n  d.getRange(12, 7, n, 2).setValues(sq.map(x => [x[0], x[1]]));\n  d.getRange(12, 9, n, 3).setFormulas(sq.map(x => [x[2], x[3], x[4]]));\n  d.getRange(12, 11, n, 1).setNumberFormat('0%');\n  d.getRange(12, 8, n, 1).setWrap(true);\n  d.setConditionalFormatRules([SpreadsheetApp.newConditionalFormatRule()\n    .setGradientMinpointWithValue('#FFFFFF', SpreadsheetApp.InterpolationType.NUMBER, '0')\n    .setGradientMaxpointWithValue('#F2B8B0', SpreadsheetApp.InterpolationType.NUMBER, '0.6')\n    .setRanges([d.getRange(12, 11, n, 1)]).build()]);\n\n  // Trend bulanan\n  const tb = akhirS + 3;\n  d.getRange(tb - 1, 7).setValue('TREND BULANAN').setFontWeight('bold').setFontColor(WARNA);\n  d.getRange(tb, 7, 1, 4).setValues([['Bulan', 'Nama bulan', 'Bil. cubaan', 'Purata markah']])\n    .setFontWeight('bold').setFontColor('#FFFFFF').setBackground(WARNA);\n  const BLN = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'];\n  d.getRange(tb + 1, 7, 12, 2).setValues(BLN.map((b, i) => [i + 1, b]));\n  d.getRange(tb + 1, 9, 12, 2).setFormulas(BLN.map((_, i) => {\n    const r = tb + 1 + i;\n    return ['=COUNTIFS(' + K + 'D:D,$C$5,' + K + 'E:E,G' + r + ')',\n      '=IFERROR(AVERAGEIFS(' + K + 'L:L,' + K + 'D:D,$C$5,' + K + 'E:E,G' + r + ')/100,\"\")'];\n  }));\n  d.getRange(tb + 1, 10, 12, 1).setNumberFormat('0.0%');\n\n  // Lebar & carta\n  d.setColumnWidth(1, 230); d.setColumnWidths(2, 4, 110); d.setColumnWidth(6, 30);\n  d.setColumnWidth(7, 50); d.setColumnWidth(8, 420); d.setColumnWidths(9, 3, 90);\n  d.setFrozenRows(8);\n  d.insertChart(d.newChart().setChartType(Charts.ChartType.BAR)\n    .addRange(d.getRange('A11:A46')).addRange(d.getRange('E11:E46'))\n    .setOption('title', 'Kadar lulus mengikut jabatan').setOption('legend', { position: 'none' })\n    .setOption('hAxis', { format: 'percent', viewWindow: { min: 0, max: 1 } })\n    .setOption('colors', [WARNA]).setNumHeaders(1).setPosition(48, 1, 0, 0).setOption('width', 620).setOption('height', 420).build());\n  d.insertChart(d.newChart().setChartType(Charts.ChartType.COLUMN)\n    .addRange(d.getRange(11, 7, n + 1, 1)).addRange(d.getRange(11, 11, n + 1, 1))\n    .setOption('title', '% salah mengikut soalan').setOption('legend', { position: 'none' })\n    .setOption('vAxis', { format: 'percent', viewWindow: { min: 0, max: 1 } })\n    .setOption('colors', ['#B4533C']).setNumHeaders(1).setPosition(48, 7, 0, 0).setOption('width', 620).setOption('height', 420).build());\n  return d;\n}\n\nfunction kolum_(n) { let s = ''; while (n > 0) { const m = (n - 1) % 26; s = String.fromCharCode(65 + m) + s; n = Math.floor((n - 1) / 26); } return s; }\n\n/** Uji dari pelayar: buka URL Web App \u2014 mesti papar {\"ok\":true,...} */\nfunction doGet() {\n  return balas({ ok: true, mesej: 'Web App SCCP PUSRAWI aktif', versi: 2, helaian: SpreadsheetApp.getActive().getName() });\n}\n\n/** Terima data dari portal */\nfunction doPost(e) {\n  try {\n    const body = JSON.parse(e.postData.contents);\n    const token = PropertiesService.getScriptProperties().getProperty('TOKEN');\n    if (token && body.token !== token) return balas({ ok: false, error: 'Token tidak sah. Semak token dalam portal.' });\n    if (body.ping) return balas({ ok: true, mesej: 'Sambungan berjaya ke \"' + SpreadsheetApp.getActive().getName() + '\"' });\n\n    const nama = HELAIAN[body.type];\n    if (!nama) return balas({ ok: false, error: 'Jenis data tidak dikenali: ' + body.type });\n    let sh = SpreadsheetApp.getActive().getSheetByName(nama);\n    if (!sh && body.type === 'kuiz') { sh = sediakanDataKuiz_(); try { binaDashboardKuiz_(); } catch (x) { } }\n    if (!sh) return balas({ ok: false, error: 'Tab ' + nama + ' tidak dijumpai.' });\n    const w = LEBAR[body.type];\n    const rows = (body.rows || []).map(r => bersih(r, w));\n    if (!rows.length) return balas({ ok: false, error: 'Tiada data dihantar.' });\n\n    const kunci = LockService.getScriptLock();\n    kunci.waitLock(30000);\n    let diganti = 0;\n    try {\n      // Buang rekod lama dengan ID yang sama (hantar semula = kemas kini, bukan pendua)\n      const ids = new Set(rows.map(r => String(r[0])));\n      const akhir = sh.getLastRow();\n      if (akhir > 1) {\n        const data = sh.getRange(2, 1, akhir - 1, w).getValues();\n        const kekal = data.filter(r => !ids.has(String(r[0])));\n        diganti = data.length - kekal.length;\n        if (diganti > 0) {\n          sh.getRange(2, 1, akhir - 1, w).clearContent();\n          if (kekal.length) sh.getRange(2, 1, kekal.length, w).setValues(kekal);\n        }\n      }\n      sh.getRange(Math.max(sh.getLastRow(), 1) + 1, 1, rows.length, w).setValues(rows);\n    } finally {\n      kunci.releaseLock();\n    }\n    return balas({ ok: true, ditambah: rows.length, diganti: diganti, helaian: nama });\n  } catch (err) {\n    return balas({ ok: false, error: String(err) });\n  }\n}\n\nfunction bersih(r, w) {\n  const out = [];\n  for (let i = 0; i < w; i++) {\n    let v = r[i] === undefined || r[i] === null ? '' : r[i];\n    if (typeof v === 'string' && /^[=+\\-@]/.test(v)) v = \"'\" + v;   // elak suntikan formula\n    out.push(v);\n  }\n  return out;\n}\n\nfunction balas(o) {\n  return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);\n}\n";
 function vGsheet(v){
   const AC=["ID_Audit","Tarikh","Tahun","Bulan","No_Rujukan","Juruaudit","Lokasi","Jenis_Skop","Skop","Kod_Isu","Dokumen","Isu","Tahap","Status","Rekod_Disemak","Catatan"];
   const NCs=["ID_Penilaian","Tarikh","Tahun","Bulan","Nama","Jawatan","Jabatan","No_Borang","Kategori","Tugasan","Penilai","Markah","Gred","Bil_Dinilai","Bil_A","Bil_B","Bil_C","Bil_F","Professionalism % … Integrity % (7 lajur)","T1 … T27 (gred setiap tindakan)","Catatan"];
   const S=(t,items,sub)=>`<section class="stack"><h2>${t}</h2>${sub?`<p class="muted">${sub}</p>`:""}<ol class="steps">${items.map(x=>`<li><div><b>${x[0]}</b><span>${x[1]}</span></div></li>`).join("")}</ol></section>`;
   const cfg=gsCfg();
   v.innerHTML=`<header class="stack"><span class="eyebrow">Laporan · Google Sheet</span><h1>Panduan A–Z: sambungkan portal ke Google Sheet</h1>
-  <p class="lede">Setiap kali pengisi menekan <b>Salin</b>, <b>⬇ PDF</b> atau <b>⬇ Word</b> dalam Audit SCCP atau Penilaian Nilai Teras, data direkod automatik ke Google Sheet induk melalui Apps Script. Berfungsi di laman web portal (GitHub Pages).</p></header>
+  <p class="lede">Setiap kali pengisi menekan <b>Salin</b>, <b>⬇ PDF</b> atau <b>⬇ Word</b> dalam Audit SCCP atau Penilaian Nilai Teras — dan setiap kali wargakerja <b>menamatkan Kuiz Penilaian Kefahaman SCCP</b> — data direkod automatik ke Google Sheet induk melalui Apps Script. Berfungsi di laman web portal (GitHub Pages).</p></header>
+
+  ${S("Kemas kini versi 2 · Rekod keputusan Kuiz (untuk Sheet yang sudah disambung)",[
+   ["Buka Apps Script","Buka Google Sheet induk → <b>Sambungan (Extensions) → Apps Script</b>."],
+   ["Ganti kod","Dalam Code.gs: tekan Ctrl+A → Delete. Kembali ke portal → tekan <b>Salin kod</b> (di bawah halaman ini) → tampal dalam Code.gs → 💾 <b>Simpan</b>."],
+   ["Cipta tab Kuiz","Kembali ke Google Sheet → tekan F5 (muat semula) → menu <b>SCCP PUSRAWI → 3. Sediakan tab Kuiz &amp; Dashboard_Kuiz</b>. Jika diminta kebenaran: Continue → pilih akaun → Advanced → Go to … (unsafe) → Allow, kemudian klik menu itu sekali lagi. Tab <b>Data_Kuiz</b> dan <b>Dashboard_Kuiz</b> akan muncul."],
+   ["Deploy versi baharu (URL kekal)","Dalam Apps Script: <b>Deploy → Manage deployments</b> → pilih deployment sedia ada → ikon ✏ <b>Edit</b> → Version: <b>New version</b> → <b>Deploy</b>. URL Web App kekal sama, jadi portal tidak perlu diubah. <i>Jangan pilih “New deployment” — itu mencipta URL baharu.</i>"],
+   ["Uji","Buka URL Web App dalam tab baharu → mesti papar <code>&quot;versi&quot;:2</code>. Kemudian jawab kuiz di portal (GitHub Pages) hingga tamat → semak tab Data_Kuiz."]],"Buat sekali sahaja. Data Audit dan Nilai Teras sedia ada tidak terjejas.")}
 
   ${S("Bahagian A · Sediakan Google Sheet induk (sekali sahaja)",[
    ["Muat naik templat","Muat naik <b>SCCP_PUSRAWI_Dashboard_Audit_NilaiTeras.xlsx</b> ke Google Drive."],
    ["Tukar kepada Google Sheets","Buka fail → <b>Fail → Simpan sebagai Helaian Google</b>. Tutup fail .xlsx, buka salinan Google Sheets (ikon hijau). Semua langkah seterusnya dibuat pada salinan ini."],
-   ["Semak nama tab","Mesti ada tab <b>Data_Audit</b> dan <b>Data_Nilai</b> (ejaan tepat, huruf besar/kecil sama). Jangan tukar nama tab."]])}
+   ["Semak nama tab","Mesti ada tab <b>Data_Audit</b> dan <b>Data_Nilai</b> (ejaan tepat, huruf besar/kecil sama). Jangan tukar nama tab. Tab <b>Data_Kuiz</b> dan <b>Dashboard_Kuiz</b> dicipta oleh Apps Script (menu SCCP PUSRAWI → 3)."]])}
 
   ${S("Bahagian B · Pasang Apps Script (sekali sahaja, ±10 minit)",[
    ["Buka Apps Script","Dalam Google Sheet induk: menu <b>Sambungan (Extensions) → Apps Script</b>. Tab baharu dibuka dengan fail <b>Code.gs</b>."],
@@ -1570,8 +1628,9 @@ function vGsheet(v){
   ${S("Bahagian D · Guna setiap hari (automatik)",[
    ["Audit SCCP","Siapkan audit → tekan <b>Salin laporan audit</b>, <b>⬇ PDF</b> atau <b>⬇ Word</b>. Data audit direkod automatik ke tab Data_Audit; mesej “✓ Direkod dalam Google Sheet” muncul di bawah butang."],
    ["Penilaian Nilai Teras","Isi borang (pilih Jabatan dari senarai) → tekan <b>Salin ringkasan</b>, <b>⬇ PDF</b> atau <b>⬇ Word</b>. Penilaian direkod automatik ke tab Data_Nilai."],
+   ["Kuiz Penilaian Kefahaman SCCP","Peserta isi nama, no. staf dan jabatan → jawab semua soalan → keputusan (markah, %, Lulus/Gagal, soalan yang salah) direkod automatik ke tab Data_Kuiz sebaik skrin keputusan dipaparkan. Setiap cubaan = satu baris."],
    ["Tiada pendua","Klik beberapa kali (cth. Salin kemudian PDF) atau betulkan dan muat turun semula — rekod dengan ID yang sama diganti, bukan ditambah."],
-   ["Lihat dashboard","Buka tab Dashboard_Audit / Dashboard_Nilai — dikemas kini serta-merta. Isi C4 untuk tapis tahun."]])}
+   ["Lihat dashboard","Buka tab Dashboard_Audit / Dashboard_Nilai / Dashboard_Kuiz — dikemas kini serta-merta. Isi C4 untuk tapis tahun."]])}
   ${S("Bahagian E · Jika ada masalah",[
    ["“Token tidak sah”","Token dalam portal tidak sama dengan menu SCCP PUSRAWI → 2. Lihat token semasa."],
    ["“jawapan bukan JSON” / gagal","URL salah (mesti /exec, bukan /dev) atau akses deploy bukan “Anyone”. Deploy → Manage deployments → ✏ → Who has access: Anyone."],
@@ -1585,6 +1644,7 @@ function vGsheet(v){
   <section class="grid g2">
     <div class="card stack"><h3>Lajur Data_Audit (16)</h3><p style="font-size:.86rem">${AC.map((c,i)=>`<span class="code" style="margin:0 4px 4px 0;display:inline-block;white-space:normal">${String.fromCharCode(65+i)} · ${c}</span>`).join("")}</p></div>
     <div class="card stack"><h3>Lajur Data_Nilai (53)</h3><p style="font-size:.86rem">${NCs.map(c=>`<span class="code" style="margin:0 4px 4px 0;display:inline-block;white-space:normal">${c}</span>`).join("")}</p></div>
+    <div class="card stack"><h3>Lajur Data_Kuiz (${15+QUIZ.length})</h3><p style="font-size:.86rem">${["ID_Kuiz","Tarikh","Masa","Tahun","Bulan","Nama","No_Staf","Jabatan","Jawatan","Markah","Jumlah_Soalan","Peratus","Keputusan","Cubaan_Ke","Soalan_Salah","S1 … S"+QUIZ.length+" (1 betul / 0 salah)"].map(c=>`<span class="code" style="margin:0 4px 4px 0;display:inline-block;white-space:normal">${c}</span>`).join("")}</p></div>
   </section>`;
   const saveCfg=()=>{const c={url:$("#gsUrl").value.trim(),token:$("#gsTok").value.trim()};store.set("sccp-gs",c);return c};
   $("#gsSave").onclick=()=>{const c=saveCfg();$("#gsMsg").textContent=c.url&&!/\/exec$/.test(c.url)?"Disimpan — tetapi URL biasanya berakhir /exec.":"Tetapan disimpan.";toast("Tetapan disimpan")};
@@ -1605,7 +1665,7 @@ $("#menuBtn").onclick=()=>setDrawer(true);$("#drClose").onclick=()=>{setDrawer(f
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#drawer").hidden){setDrawer(false);$("#menuBtn").focus()}});
 $("#dq").addEventListener("keydown",e=>{if(e.key==="Enter"){pendingQuery=e.target.value;store.set("sccp-lib",{doc:"",lvl:"",q:e.target.value});setDrawer(false);if(location.hash==="#pustaka")route();else location.hash="#pustaka"}});
 const gq=$("#gq");gq.addEventListener("keydown",e=>{if(e.key==="Enter"){pendingQuery=gq.value;store.set("sccp-lib",{doc:"",lvl:"",q:gq.value});if(location.hash==="#pustaka")route();else location.hash="#pustaka"}});
-if(!location.hash){const last=store.get("sccp-last",null);if(last&&ROUTES.find(r=>r.id===last))history.replaceState(null,"","#"+last)}
+/* paparan lalai: sentiasa Utama apabila dibuka tanpa pautan khusus */
 route();
 })();
 
