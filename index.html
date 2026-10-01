@@ -943,11 +943,11 @@ const ROUTES=[
  {id:"umum",t:"Semakan Syariah Umum",grp:"Audit"},
  {id:"audit",t:"Audit SCCP Terperinci",grp:"Audit"},
  {id:"susulan",t:"Tindakan Susulan",grp:"Audit"},
- {id:"gsheet",t:"Sambung Google Sheet",grp:"Laporan"}
+ {id:"gsheet",t:"Sambung Google Sheet",grp:"Laporan",hide:1}
 ];
 function buildNav(){
   let g="",h="";
-  ROUTES.forEach(r=>{if(r.grp!==g){g=r.grp;h+=`<div class="grp eyebrow">${g}</div>`}h+=`<a href="#${r.id}" data-r="${r.id}">${r.t}${r.n?`<span class="n">${r.n}</span>`:""}</a>`});
+  ROUTES.forEach(r=>{if(r.hide)return;if(r.grp!==g){g=r.grp;h+=`<div class="grp eyebrow">${g}</div>`}h+=`<a href="#${r.id}" data-r="${r.id}">${r.t}${r.n?`<span class="n">${r.n}</span>`:""}</a>`});
   $("#rail").innerHTML=h;
   $("#tabs").innerHTML="";
   $("#drNav").innerHTML=h;
